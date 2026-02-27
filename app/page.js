@@ -82,6 +82,11 @@ const CURRICULUM_OPTIONS = [
   { value: 'US', label: 'US' },
 ]
 
+const ROOM_OPTIONS = [
+  { value: '有', label: '有住宿' },
+  { value: '无', label: '无住宿' },
+]
+
 const CURRICULUM_COLORS = {
   AUS: {
     bg: 'bg-amber-50 dark:bg-amber-950/40',
@@ -135,6 +140,7 @@ export default function Home() {
     max_budget: '',
     min_budget: '',
     curricula: [],
+    rooms: [],
   })
 
   const toggleCity = (city) => {
@@ -155,6 +161,15 @@ export default function Home() {
     }))
   }
 
+  const toggleRoom = (value) => {
+    setForm((prev) => ({
+      ...prev,
+      rooms: prev.rooms.includes(value)
+        ? prev.rooms.filter((r) => r !== value)
+        : [...prev.rooms, value],
+    }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
@@ -166,6 +181,8 @@ export default function Home() {
     const minBudget = form.min_budget === '' ? null : Number(form.min_budget)
     const cities = form.cities.filter(Boolean)
     const curricula = form.curricula.length ? form.curricula : [null]
+    // 未选或全选均视为不限，只选一个时才传具体值
+    const room = form.rooms.length === 1 ? form.rooms[0] : null
 
     if (!cities.length) {
       setError('请至少选择一个城市')
@@ -212,6 +229,7 @@ export default function Home() {
               max_budget: maxBudget,
               min_budget: minBudget || null,
               curriculum: curriculum || null,
+              room: room || null,
             }),
           })
           const json = await res.json()
@@ -383,6 +401,27 @@ export default function Home() {
             </div>
           </div>
           <div>
+            <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              住宿 <span className="text-zinc-400">（选填，可多选）</span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {ROOM_OPTIONS.map((o) => (
+                <label
+                  key={o.value}
+                  className="flex cursor-pointer items-center gap-1.5 rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-700"
+                >
+                  <input
+                    type="checkbox"
+                    checked={form.rooms.includes(o.value)}
+                    onChange={() => toggleRoom(o.value)}
+                    className="rounded border-zinc-400"
+                  />
+                  <span className="text-zinc-900 dark:text-zinc-100">{o.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
             <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
               最小预算（马币） <span className="text-zinc-400">（选填）</span>
             </label>
@@ -475,6 +514,9 @@ export default function Home() {
                                     {t.cny}
                                   </span>
                                 )}
+                              </p>
+                              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                                住宿：{school.room ?? '—'}
                               </p>
                             </li>
                           )

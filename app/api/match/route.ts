@@ -9,6 +9,7 @@ type MatchReq = {
   max_budget: number; // 必填
   min_budget?: number | null; // 选填
   curriculum?: string | null; // 选填
+  room?: string | null; // 选填：'有' | '无'
 };
 
 export async function POST(req: Request) {
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
     }
 
     // --- 调用 RPC ---
+    // p_room 暂不传给 RPC（数据库函数尚未支持），改为在结果中过滤
     const rpcPayload = {
       p_dob: body.dob,
       p_intake_year: Number(body.intake_year),
@@ -79,7 +81,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const data = text ? JSON.parse(text) : [];
+    let data: any[] = text ? JSON.parse(text) : [];
+
+    // 若前端传了 room 筛选条件，在结果集中过滤
+    const room = body.room ?? null;
+    if (room) {
+      data = data.filter((s: any) => s.room === room);
+    }
+
     return NextResponse.json({ success: true, data });
   } catch (e: any) {
     return NextResponse.json(
