@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.97.0",
+    "dom-to-image-more": "^3.7.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.0",
     "next": "16.1.6",
     "pg": "^8.18.0",
     "react": "19.2.3",

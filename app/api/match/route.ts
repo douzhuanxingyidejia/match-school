@@ -10,6 +10,7 @@ type MatchReq = {
   min_budget?: number | null; // 选填
   curriculum?: string | null; // 选填
   room?: string | null; // 选填：'有' | '无'
+  visa?: string | null; // 选填：'有' | '无'
 };
 
 export async function POST(req: Request) {
@@ -87,6 +88,12 @@ export async function POST(req: Request) {
     const room = body.room ?? null;
     if (room) {
       data = data.filter((s: any) => s.room === room);
+    }
+
+    // 若前端传了 visa 筛选条件，在结果集中过滤
+    const visa = body.visa ?? null;
+    if (visa) {
+      data = data.filter((s: any) => s.visa === visa);
     }
 
     return NextResponse.json({ success: true, data });
