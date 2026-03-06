@@ -175,6 +175,9 @@ export default function Home() {
     name: '',
     gender: '',
     nationality: '',
+    accompanyParent: '',
+    dependentVisa: '',
+    englishLevel: '',
     notes: '',
   })
 
@@ -408,6 +411,48 @@ export default function Home() {
               />
             </div>
 
+            {/* 陪读家长 */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                陪读家长 <span className="text-zinc-400">（选填）</span>
+              </label>
+              <input
+                type="text"
+                value={studentInfo.accompanyParent}
+                onChange={(e) => setStudentInfo((p) => ({ ...p, accompanyParent: e.target.value }))}
+                placeholder="如：爸爸 / 妈妈"
+                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder-zinc-500"
+              />
+            </div>
+
+            {/* 需要陪读签证 */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                需要陪读签证 <span className="text-zinc-400">（选填）</span>
+              </label>
+              <input
+                type="text"
+                value={studentInfo.dependentVisa}
+                onChange={(e) => setStudentInfo((p) => ({ ...p, dependentVisa: e.target.value }))}
+                placeholder="如：是 / 否"
+                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder-zinc-500"
+              />
+            </div>
+
+            {/* 英语水平 */}
+            <div>
+              <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                英语水平 <span className="text-zinc-400">（选填）</span>
+              </label>
+              <input
+                type="text"
+                value={studentInfo.englishLevel}
+                onChange={(e) => setStudentInfo((p) => ({ ...p, englishLevel: e.target.value }))}
+                placeholder="如：初级 / 中级 / 流利"
+                className="w-full rounded-md border border-zinc-300 px-3 py-2 text-zinc-900 placeholder-zinc-400 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-100 dark:placeholder-zinc-500"
+              />
+            </div>
+
             {/* 备注 */}
             <div>
               <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
@@ -558,6 +603,18 @@ export default function Home() {
                   <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.nationality || '—'}</span>
                 </div>
                 <div>
+                  <span className="text-zinc-500 dark:text-zinc-400">陪读家长：</span>
+                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.accompanyParent || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-zinc-500 dark:text-zinc-400">需要陪读签证：</span>
+                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.dependentVisa || '—'}</span>
+                </div>
+                <div>
+                  <span className="text-zinc-500 dark:text-zinc-400">英语水平：</span>
+                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.englishLevel || '—'}</span>
+                </div>
+                <div>
                   <span className="text-zinc-500 dark:text-zinc-400">备注：</span>
                   <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.notes || '—'}</span>
                 </div>
@@ -651,6 +708,9 @@ export default function Home() {
                     ['入学年份', `${form.intake_year} 年`],
                     ['出生日期', dobDisplay],
                     ['国籍', studentInfo.nationality || '—'],
+                    ['陪读家长', studentInfo.accompanyParent || '—'],
+                    ['需要陪读签证', studentInfo.dependentVisa || '—'],
+                    ['英语水平', studentInfo.englishLevel || '—'],
                     ['备注', studentInfo.notes || '—'],
                   ].map(([label, value]) => (
                     <div key={label}>
