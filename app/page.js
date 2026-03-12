@@ -1094,7 +1094,7 @@ export default function Home() {
                       <div className={`px-4 py-3 font-semibold ${style.header}`}>
                         <span className="mr-4">{group.curriculumLabel}</span>
                         <span className="text-sm font-normal opacity-90">
-                          年龄：{age != null ? `${age} 岁` : '—'} · 年级：{gradeLabel}
+                          年龄：{age != null ? `${age} 岁` : '—'} · 年级：{group.schools[0]?.grade_display || '—'}
                         </span>
                       </div>
                       <ul className="space-y-2 p-4">
