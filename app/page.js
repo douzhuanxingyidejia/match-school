@@ -264,7 +264,7 @@ export default function Home() {
     const maxBudget = form.max_budget === '' ? null : Number(form.max_budget)
     const minBudget = form.min_budget === '' ? null : Number(form.min_budget)
     const cities = form.cities.filter(Boolean)
-    const curricula = form.curricula.length ? form.curricula : [null]
+    const curricula = form.curricula.length ? form.curricula : CURRICULUM_OPTIONS.map((o) => o.value)
     const room = form.rooms.length === 1 ? form.rooms[0] : null
     const visa = form.visas.length === 1 ? form.visas[0] : null
 
