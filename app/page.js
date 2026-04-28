@@ -504,34 +504,56 @@ export default function Home() {
         const { default: html2canvas } = await import('html2canvas')
         const opts = { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false }
 
-        // 把外链 <img> 重写到本站代理，等加载完成；让 html2canvas 不再受 CORS 限制
+        // 把外链 <img> 通过代理拉成字节，再转成 data: URI 塞回 src
+        // 这样 html2canvas 看到的所有图都是 inline data，永远不会触发 CORS / tainted canvas
+        const blobToDataUri = (blob) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = () => reject(reader.error)
+            reader.readAsDataURL(blob)
+          })
+
         const rewriteImagesToProxy = async (doc) => {
           const imgs = Array.from(doc.querySelectorAll('img'))
           await Promise.all(
-            imgs.map((img) => {
+            imgs.map(async (img) => {
               const src = img.getAttribute('src')
-              if (!src) return null
-              if (src.startsWith('data:') || src.startsWith('/')) return null
+              if (!src) return
+              if (src.startsWith('data:')) return
               let u
               try {
-                u = new URL(src)
+                // 解析为绝对 URL（处理相对路径）
+                u = new URL(src, doc.location?.href || window.location.origin)
               } catch {
-                return null
+                return
               }
-              if (u.origin === window.location.origin) return null
-              const proxied = `/api/img-proxy?url=${encodeURIComponent(src)}`
-              return new Promise((resolve) => {
-                const done = () => {
-                  img.removeEventListener('load', done)
-                  img.removeEventListener('error', done)
-                  resolve(null)
+              // 同源图片本来就 CORS 干净，不需要代理
+              if (u.origin === window.location.origin) return
+              const proxiedUrl = `/api/img-proxy?url=${encodeURIComponent(u.toString())}`
+              try {
+                const res = await fetch(proxiedUrl)
+                if (!res.ok) {
+                  console.warn('代理拉图失败:', u.toString(), res.status)
+                  return
                 }
-                img.addEventListener('load', done)
-                img.addEventListener('error', done)
-                // 加 crossorigin 让 html2canvas 的 useCORS 路径也能识别
-                img.setAttribute('crossorigin', 'anonymous')
-                img.src = proxied
-              })
+                const blob = await res.blob()
+                const dataUri = await blobToDataUri(blob)
+                await new Promise((resolve) => {
+                  const done = () => {
+                    img.removeEventListener('load', done)
+                    img.removeEventListener('error', done)
+                    resolve()
+                  }
+                  img.addEventListener('load', done)
+                  img.addEventListener('error', done)
+                  // 移除 crossorigin（dataURI 不需要），换 src
+                  img.removeAttribute('crossorigin')
+                  img.src = dataUri
+                })
+              } catch (e) {
+                console.warn('转 dataURI 失败:', u.toString(), e)
+              }
             })
           )
         }

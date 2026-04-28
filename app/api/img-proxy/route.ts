@@ -98,24 +98,24 @@ export async function GET(req: Request) {
   }
 
   const key = urlToKey(url)
-  const publicUrl = supabase.storage.from(BUCKET).getPublicUrl(key).data.publicUrl
 
-  // 1) 探测 Supabase 是否已缓存（HEAD 请求 ~100ms）
+  // 1) 优先从 Supabase Storage 取（服务器侧下载，无 CORS 协商）
   try {
-    const head = await fetch(publicUrl, { method: 'HEAD', cache: 'no-store' })
-    if (head.ok) {
-      // 命中缓存：302 重定向到 Supabase CDN，浏览器直接从 CDN 拉
-      return new Response(null, {
-        status: 302,
+    const { data: blob, error } = await supabase.storage.from(BUCKET).download(key)
+    if (!error && blob) {
+      const buf = await blob.arrayBuffer()
+      // blob.type 来自 Supabase 上传时记录的 contentType
+      const ct = blob.type || 'image/jpeg'
+      return new Response(buf, {
         headers: {
-          Location: publicUrl,
-          'Cache-Control': 'public, max-age=86400',
+          'Content-Type': ct,
+          'Cache-Control': 'public, max-age=86400, immutable',
           'Access-Control-Allow-Origin': '*',
         },
       })
     }
   } catch {
-    // HEAD 失败（网络/Supabase 不可达），继续走上游路径
+    // 下载异常，走上游路径
   }
 
   // 2) 未缓存：拉上游
@@ -146,32 +146,26 @@ export async function GET(req: Request) {
   const buf = await upstreamRes.arrayBuffer()
   const contentType = upstreamRes.headers.get('content-type') || 'image/jpeg'
 
-  // 3) 上传到 Supabase Storage（upsert 让并发请求安全）
-  const { error: uploadErr } = await supabase.storage
-    .from(BUCKET)
-    .upload(key, buf, {
-      contentType,
-      upsert: true,
-      cacheControl: '31536000', // 1 年
-    })
-
-  if (uploadErr) {
-    console.warn('[img-proxy] Supabase upload failed, falling back:', uploadErr.message)
-    // 上传失败（bucket 不存在 / 权限问题），直接返回字节让本次能用
-    return new Response(buf, {
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=86400',
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
+  // 3) 上传到 Supabase Storage（upsert 让并发请求安全），失败也不影响本次返回
+  try {
+    const { error: uploadErr } = await supabase.storage
+      .from(BUCKET)
+      .upload(key, buf, {
+        contentType,
+        upsert: true,
+        cacheControl: '31536000', // 1 年
+      })
+    if (uploadErr) {
+      console.warn('[img-proxy] Supabase upload failed:', uploadErr.message)
+    }
+  } catch (e: any) {
+    console.warn('[img-proxy] Supabase upload threw:', e?.message)
   }
 
-  // 4) 上传成功，302 到 Supabase 公网 URL
-  return new Response(null, {
-    status: 302,
+  // 4) 直接返字节（不重定向），保证 CORS 简单且 html2canvas 能 toBlob
+  return new Response(buf, {
     headers: {
-      Location: publicUrl,
+      'Content-Type': contentType,
       'Cache-Control': 'public, max-age=86400',
       'Access-Control-Allow-Origin': '*',
     },
