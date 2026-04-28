@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* 打印 / 导出 PDF 专用：A4 页面，详情 iframe 高度自适应内容（不被 JS 设的固定高度卡住） */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  html, body {
+    background: #fff !important;
+  }
+  /* 让 iframe 在打印时高度按内容自然流动，避免空白页 */
+  iframe.school-detail-frame {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}

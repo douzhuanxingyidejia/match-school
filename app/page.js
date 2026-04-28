@@ -186,6 +186,9 @@ export default function Home() {
   const [selectedSchools, setSelectedSchools] = useState(new Map()) // key → school
   const [cartOpen, setCartOpen] = useState(false)
 
+  // ── Page 3: 长图导出状态 ──
+  const [exportingState, setExportingState] = useState({ active: false, label: '' })
+
   // ── Page 2: matching form & results ──
   const [resultsByCurriculum, setResultsByCurriculum] = useState([])
   const [error, setError] = useState(null)
@@ -490,31 +493,128 @@ export default function Home() {
         ? `${form.dob_year}年${Number(form.dob_month)}月${Number(form.dob_day)}日`
         : '—'
 
-    const handleExportPDF = async () => {
+    const handleExportLongImage = async () => {
       const element = reportRef.current
-      if (!element) return
+      if (!element) {
+        alert('报告未就绪，请稍候再试')
+        return
+      }
+      setExportingState({ active: true, label: '加载图片资源…' })
       try {
-        const { default: jsPDF } = await import('jspdf')
         const { default: html2canvas } = await import('html2canvas')
-        // 截取隐藏的纯 inline-style div，完全不依赖 Tailwind CSS，无 oklch() 问题
-        const canvas = await html2canvas(element, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: '#f9fafb',
+        const opts = { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false }
+
+        // 把外链 <img> 重写到本站代理，等加载完成；让 html2canvas 不再受 CORS 限制
+        const rewriteImagesToProxy = async (doc) => {
+          const imgs = Array.from(doc.querySelectorAll('img'))
+          await Promise.all(
+            imgs.map((img) => {
+              const src = img.getAttribute('src')
+              if (!src) return null
+              if (src.startsWith('data:') || src.startsWith('/')) return null
+              let u
+              try {
+                u = new URL(src)
+              } catch {
+                return null
+              }
+              if (u.origin === window.location.origin) return null
+              const proxied = `/api/img-proxy?url=${encodeURIComponent(src)}`
+              return new Promise((resolve) => {
+                const done = () => {
+                  img.removeEventListener('load', done)
+                  img.removeEventListener('error', done)
+                  resolve(null)
+                }
+                img.addEventListener('load', done)
+                img.addEventListener('error', done)
+                // 加 crossorigin 让 html2canvas 的 useCORS 路径也能识别
+                img.setAttribute('crossorigin', 'anonymous')
+                img.src = proxied
+              })
+            })
+          )
+        }
+
+        // 1) 先并行预热所有 iframe 的图片代理（首次拉远端较慢，并行可以重叠等待）
+        const iframes = Array.from(document.querySelectorAll('iframe.school-detail-frame'))
+        await Promise.all(
+          iframes.map(async (iframe) => {
+            const doc = iframe.contentDocument
+            if (doc?.body) {
+              try {
+                await rewriteImagesToProxy(doc)
+              } catch (e) {
+                console.warn('图片代理预热失败:', e)
+              }
+            }
+          })
+        )
+
+        // 2) 汇总表：截隐藏的 reportRef DOM（纯 inline style，避开 Tailwind 4 oklch 兼容问题）
+        setExportingState({ active: true, label: '截取汇总表…' })
+        const summaryCanvas = await html2canvas(element, opts)
+
+        // 3) 每个学校详情依次截图（html2canvas 单次开销大，串行更稳）
+        const detailCanvases = []
+        for (let i = 0; i < iframes.length; i++) {
+          setExportingState({
+            active: true,
+            label: `截取学校详情 ${i + 1}/${iframes.length}…`,
+          })
+          try {
+            const doc = iframes[i].contentDocument
+            if (!doc?.body) continue
+            const c = await html2canvas(doc.body, opts)
+            detailCanvases.push(c)
+          } catch (err) {
+            console.warn('截取 iframe 失败:', err)
+          }
+        }
+
+        // 4) 按最大宽度统一缩放 + 竖向拼接
+        setExportingState({ active: true, label: '拼接长图…' })
+        const all = [summaryCanvas, ...detailCanvases]
+        const targetWidth = Math.max(...all.map((c) => c.width))
+        const scaledHeights = all.map((c) => Math.round((c.height * targetWidth) / c.width))
+        const totalHeight = scaledHeights.reduce((s, h) => s + h, 0)
+
+        const final = document.createElement('canvas')
+        final.width = targetWidth
+        final.height = totalHeight
+        const ctx = final.getContext('2d')
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, targetWidth, totalHeight)
+
+        let y = 0
+        all.forEach((c, i) => {
+          ctx.drawImage(c, 0, y, targetWidth, scaledHeights[i])
+          y += scaledHeights[i]
         })
-        const imgData = canvas.toDataURL('image/png')
-        const w = canvas.width / 2
-        const h = canvas.height / 2
-        const pdf = new jsPDF({
-          orientation: w > h ? 'landscape' : 'portrait',
-          unit: 'px',
-          format: [w, h],
+
+        // 5) 触发下载
+        setExportingState({ active: true, label: '生成下载…' })
+        await new Promise((resolve) => {
+          final.toBlob((blob) => {
+            if (!blob) {
+              alert('生成图片失败')
+              resolve()
+              return
+            }
+            const url = URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.download = '选校报告.png'
+            link.href = url
+            link.click()
+            setTimeout(() => URL.revokeObjectURL(url), 1000)
+            resolve()
+          }, 'image/png')
         })
-        pdf.addImage(imgData, 'PNG', 0, 0, w, h)
-        pdf.save('选校报告.pdf')
       } catch (err) {
-        console.error('导出PDF失败:', err)
-        alert('导出失败，请重试：' + err.message)
+        console.error('导出长图失败:', err)
+        alert('导出失败：' + (err?.message || err))
+      } finally {
+        setExportingState({ active: false, label: '' })
       }
     }
 
@@ -565,10 +665,11 @@ export default function Home() {
                   🖨 打印
                 </button>
                 <button
-                  onClick={() => window.print()}
-                  className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900"
+                  onClick={handleExportLongImage}
+                  disabled={exportingState.active}
+                  className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 min-w-[180px]"
                 >
-                  📄 导出 PDF
+                  {exportingState.active ? `⏳ ${exportingState.label}` : '📷 导出长图'}
                 </button>
               </div>
             </div>
@@ -700,11 +801,70 @@ export default function Home() {
                   <iframe
                     src={url}
                     title={school.school_name_cn || school.school_name_en}
+                    className="school-detail-frame"
                     style={{ width: '100%', border: 0, display: 'block' }}
                     onLoad={(e) => {
                       try {
                         const doc = e.target.contentDocument
-                        const h = doc?.body?.scrollHeight
+                        if (!doc) return
+
+                        // 1) 注入 A4 友好的打印样式：缩放、避免卡片切半、去掉阴影
+                        const PRINT_CSS = `
+                          @media print {
+                            @page { size: A4; margin: 10mm; }
+                            html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+                            .page {
+                              width: 100% !important;
+                              max-width: 100% !important;
+                              min-height: 0 !important;
+                              padding: 0 !important;
+                              margin: 0 !important;
+                              background: #fff !important;
+                              box-shadow: none !important;
+                            }
+                            .hero-card { height: 200px !important; box-shadow: none !important; }
+                            .school-name-cn { font-size: 28px !important; }
+                            .school-name-en { font-size: 16px !important; margin-top: 8px !important; }
+                            .curriculum-tags { margin-top: 12px !important; }
+                            .curriculum-tags span { font-size: 13px !important; padding: 6px 14px !important; }
+                            .location-pill { margin-top: 12px !important; padding: 8px 16px !important; font-size: 14px !important; }
+                            .hero-content { left: 24px !important; top: 24px !important; right: 24px !important; bottom: 20px !important; }
+                            section { margin-top: 20px !important; }
+                            .section-title-row h2 { font-size: 22px !important; }
+                            .intro-text { font-size: 14px !important; line-height: 1.6 !important; }
+                            .stat-value { font-size: 20px !important; }
+                            .stat-label { font-size: 12px !important; }
+                            .advantage-card h3 { font-size: 16px !important; }
+                            .advantage-card p { font-size: 13px !important; }
+                            .curriculum-card h3 { font-size: 20px !important; }
+                            .curriculum-card p { font-size: 13px !important; }
+                            .curriculum-age { font-size: 14px !important; margin-bottom: 10px !important; }
+                            .activity-title { font-size: 13px !important; }
+                            .campus-card { height: 120px !important; }
+                            /* 关键：避免在卡片中间分页 */
+                            .hero-card,
+                            .intro-card,
+                            .advantage-card,
+                            .campus-card,
+                            .curriculum-card,
+                            .activity-card {
+                              break-inside: avoid !important;
+                              page-break-inside: avoid !important;
+                              box-shadow: none !important;
+                            }
+                            * { box-shadow: none !important; }
+                          }
+                        `
+                        // 避免重复注入（HMR / 重渲染时）
+                        if (!doc.querySelector('style[data-print-injected]')) {
+                          const style = doc.createElement('style')
+                          style.setAttribute('data-print-injected', 'true')
+                          style.textContent = PRINT_CSS
+                          doc.head.appendChild(style)
+                        }
+
+                        // 2) 屏幕显示用：高度按内容自适应（打印时 globals.css 会把 height 强制为 auto）
+                        const h = doc.body?.scrollHeight
                         if (h) e.target.style.height = h + 'px'
                       } catch (_) {
                         // 跨域或未就绪，忽略
