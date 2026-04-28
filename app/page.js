@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { detailUrlFor } from './lib/school-details'
 
 const DEFAULT_MYR_TO_CNY = 1.55
 
@@ -564,7 +565,7 @@ export default function Home() {
                   🖨 打印
                 </button>
                 <button
-                  onClick={handleExportPDF}
+                  onClick={() => window.print()}
                   className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900"
                 >
                   📄 导出 PDF
@@ -681,6 +682,38 @@ export default function Home() {
             <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
               * 本表所列费用基于学校目前官方文件整理，实际费用可能随年度、政策及汇率变化而调整，最终收费标准以学校正式账单或录取通知书为准。
             </p>
+
+            {/* 学校详情区（每所选中且有详情文件的学校占一页） */}
+            {schoolList.map((school, idx) => {
+              const url = detailUrlFor(school.school_name_en)
+              if (!url) return null
+              return (
+                <div
+                  key={`detail-${idx}`}
+                  style={{
+                    pageBreakBefore: 'always',
+                    breakBefore: 'page',
+                    breakInside: 'avoid',
+                    marginTop: '32px',
+                  }}
+                >
+                  <iframe
+                    src={url}
+                    title={school.school_name_cn || school.school_name_en}
+                    style={{ width: '100%', border: 0, display: 'block' }}
+                    onLoad={(e) => {
+                      try {
+                        const doc = e.target.contentDocument
+                        const h = doc?.body?.scrollHeight
+                        if (h) e.target.style.height = h + 'px'
+                      } catch (_) {
+                        // 跨域或未就绪，忽略
+                      }
+                    }}
+                  />
+                </div>
+              )
+            })}
             </div>
 
             {/* ── 隐藏的 PDF 专用 div（纯 inline style，无 Tailwind，无 oklch 问题） ── */}
@@ -1101,17 +1134,27 @@ export default function Home() {
                         {group.schools.map((school, index) => {
                           const t = formatTuition(school.tuition_amount, myrToCny)
                           const selected = isSchoolSelected(school)
+                          const detailUrl = detailUrlFor(school.school_name_en)
+                          const handleCardClick = () => {
+                            if (detailUrl) window.open(detailUrl, '_blank', 'noopener')
+                          }
                           return (
                             <li
                               key={school.id ?? index}
-                              className={`relative rounded-lg border bg-white p-4 pr-10 dark:bg-zinc-800 transition-colors
+                              onClick={handleCardClick}
+                              className={`relative rounded-lg border bg-white p-4 pr-10 dark:bg-zinc-800 transition-shadow
                                 ${selected
                                   ? 'border-zinc-900 dark:border-zinc-300'
                                   : 'border-zinc-200 dark:border-zinc-700'
-                                }`}
+                                }
+                                ${detailUrl ? 'cursor-pointer hover:shadow-md hover:border-zinc-400 dark:hover:border-zinc-500' : ''}
+                              `}
                             >
                               {/* 勾选框 */}
-                              <label className="absolute right-3 top-3 cursor-pointer">
+                              <label
+                                className="absolute right-3 top-3 cursor-pointer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
                                 <input
                                   type="checkbox"
                                   checked={selected}
@@ -1143,6 +1186,11 @@ export default function Home() {
                               <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
                                 可入学月份：{school.intake_months ?? '—'}
                               </p>
+                              {detailUrl && (
+                                <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
+                                  查看详情 ↗
+                                </p>
+                              )}
                             </li>
                           )
                         })}
