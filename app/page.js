@@ -938,11 +938,44 @@ export default function Home() {
       }
     }
 
-    // 共享 iframe onLoad 处理：注入打印样式 + 自适应高度（学校详情和体系介绍 iframe 共用）
+    // 共享 iframe onLoad 处理：注入屏幕修复样式 + 打印样式 + 自适应高度（学校详情和体系介绍 iframe 共用）
     const handleDetailFrameLoad = (e) => {
       try {
         const doc = e.target.contentDocument
         if (!doc) return
+        // 屏幕显示修复：iframe 渲染宽度比 960px 设计稿窄时（约 928px），副标题等会换行，
+        // 原 .hero-content 是 position:absolute（不撑高父容器），导致内容溢出 360px 被 overflow:hidden 切掉。
+        // 修法：把 .hero-content 改回普通文档流（relative + padding），让它撑开 .hero-card；
+        // 同时把 .hero-image / .hero-overlay 显式改为绝对定位作为背景层。
+        const SCREEN_FIX_CSS = `
+          .hero-card {
+            height: auto !important;
+            min-height: 360px !important;
+          }
+          .hero-image, .hero-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+          }
+          .hero-content {
+            position: relative !important;
+            left: auto !important;
+            top: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            padding: 54px 48px 40px !important;
+            width: 100% !important;
+            z-index: 2 !important;
+          }
+          .school-name-cn {
+            white-space: normal !important;
+          }
+        `
+        if (!doc.querySelector('style[data-screen-fix]')) {
+          const sf = doc.createElement('style')
+          sf.setAttribute('data-screen-fix', 'true')
+          sf.textContent = SCREEN_FIX_CSS
+          doc.head.appendChild(sf)
+        }
         const PRINT_CSS = `
           @media print {
             @page { size: A4; margin: 10mm; }
