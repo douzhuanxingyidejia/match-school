@@ -2,6 +2,11 @@
 
 import { useState, useRef } from 'react'
 import { detailUrlFor } from './lib/school-details'
+import {
+  CURRICULUM_ORDER,
+  curriculumLabelFor,
+  curriculumIntroUrlFor,
+} from './lib/curricula'
 
 const DEFAULT_MYR_TO_CNY = 1.55
 
@@ -78,7 +83,7 @@ const CURRICULUM_OPTIONS = [
   { value: 'IB', label: 'IB' },
   { value: 'OSSD', label: 'OSSD' },
   { value: 'UK', label: 'UK' },
-  { value: 'US', label: 'US' },
+  { value: 'US', label: 'AP' }, // DB 值仍为 US，仅显示标签为 AP
 ]
 
 const ROOM_OPTIONS = [
@@ -188,6 +193,10 @@ export default function Home() {
 
   // ── Page 3: 长图导出状态 ──
   const [exportingState, setExportingState] = useState({ active: false, label: '' })
+
+  // ── Page 3: 分享链接状态 ──
+  const [sharingState, setSharingState] = useState({ active: false, label: '' })
+  const [shareUrl, setShareUrl] = useState(null) // 生成成功后的链接
 
   // ── Page 2: matching form & results ──
   const [resultsByCurriculum, setResultsByCurriculum] = useState([])
@@ -494,18 +503,29 @@ export default function Home() {
         : '—'
 
     const handleExportLongImage = async () => {
-      const element = reportRef.current
-      if (!element) {
-        alert('报告未就绪，请稍候再试')
+      if (schoolList.length === 0) {
+        alert('请先选择至少一所学校')
         return
       }
-      setExportingState({ active: true, label: '加载图片资源…' })
+
+      // 按 CURRICULUM_ORDER 分组,跳过空组
+      const groups = CURRICULUM_ORDER.map((cur) => ({
+        cur,
+        label: curriculumLabelFor(cur),
+        schools: schoolList.filter((s) => s.curriculum === cur),
+      })).filter((g) => g.schools.length > 0)
+
+      if (groups.length === 0) {
+        alert('选中的学校没有匹配到任何体系')
+        return
+      }
+
+      setExportingState({ active: true, label: '准备…' })
       try {
         const { default: html2canvas } = await import('html2canvas')
         const opts = { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false }
 
         // 把外链 <img> 通过代理拉成字节，再转成 data: URI 塞回 src
-        // 这样 html2canvas 看到的所有图都是 inline data，永远不会触发 CORS / tainted canvas
         const blobToDataUri = (blob) =>
           new Promise((resolve, reject) => {
             const reader = new FileReader()
@@ -523,20 +543,15 @@ export default function Home() {
               if (src.startsWith('data:')) return
               let u
               try {
-                // 解析为绝对 URL（处理相对路径）
                 u = new URL(src, doc.location?.href || window.location.origin)
               } catch {
                 return
               }
-              // 同源图片本来就 CORS 干净，不需要代理
               if (u.origin === window.location.origin) return
               const proxiedUrl = `/api/img-proxy?url=${encodeURIComponent(u.toString())}`
               try {
                 const res = await fetch(proxiedUrl)
-                if (!res.ok) {
-                  console.warn('代理拉图失败:', u.toString(), res.status)
-                  return
-                }
+                if (!res.ok) return
                 const blob = await res.blob()
                 const dataUri = await blobToDataUri(blob)
                 await new Promise((resolve) => {
@@ -547,7 +562,6 @@ export default function Home() {
                   }
                   img.addEventListener('load', done)
                   img.addEventListener('error', done)
-                  // 移除 crossorigin（dataURI 不需要），换 src
                   img.removeAttribute('crossorigin')
                   img.src = dataUri
                 })
@@ -558,85 +572,431 @@ export default function Home() {
           )
         }
 
-        // 1) 先并行预热所有 iframe 的图片代理（首次拉远端较慢，并行可以重叠等待）
-        const iframes = Array.from(document.querySelectorAll('iframe.school-detail-frame'))
-        await Promise.all(
-          iframes.map(async (iframe) => {
-            const doc = iframe.contentDocument
-            if (doc?.body) {
+        // 构造一份"屏幕外的"页头 DOM：学生信息 + 5 列表（仅本体系）
+        const buildHiddenHeaderEl = (label, groupSchools) => {
+          const studentRowsHtml = [
+            ['学生姓名', studentInfo.name],
+            ['学生性别', studentInfo.gender],
+            ['入学年份', `${form.intake_year} 年`],
+            ['出生日期', dobDisplay],
+            ['国籍', studentInfo.nationality],
+            ['陪读家长', studentInfo.accompanyParent],
+            ['需要陪读签证', studentInfo.dependentVisa],
+            ['英语水平', studentInfo.englishLevel],
+            ['备注', studentInfo.notes],
+          ]
+            .map(
+              ([k, v]) =>
+                `<div><span style="color:#667991">${k}：</span><span style="color:#082b5f;font-weight:600">${esc(v || '—')}</span></div>`
+            )
+            .join('')
+
+          const tableRowsHtml = groupSchools
+            .map((s, i) => {
+              const t = formatTuition(s.tuition_amount)
+              const isLast = i === groupSchools.length - 1
+              const border = isLast ? 'none' : '1px solid rgba(37,104,184,.06)'
+              return `
+                <tr style="border-bottom:${border}">
+                  <td style="padding:14px 18px;font-weight:600;color:#082b5f">${esc(s.school_name_cn || '—')}</td>
+                  <td style="padding:14px 18px;color:#243f63">${esc(s.city || '—')}</td>
+                  <td style="padding:14px 18px;color:#243f63">${esc(s.grade_display || '—')}</td>
+                  <td style="padding:14px 18px;color:#243f63;white-space:nowrap;font-weight:600">${esc(t.myr)}</td>
+                  <td style="padding:14px 18px;color:#243f63">${esc(s.intake_months || '—')}</td>
+                </tr>`
+            })
+            .join('')
+
+          const wrapper = document.createElement('div')
+          wrapper.style.cssText =
+            'position:fixed;left:-9999px;top:0;width:1100px;padding:32px 28px 24px;background:linear-gradient(180deg,#f7fbff 0%,#edf5ff 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;color:#243f63;'
+          wrapper.innerHTML = `
+            <h1 style="font-size:30px;font-weight:900;color:#082b5f;margin:0 0 24px;letter-spacing:-0.025em">选校报告 · 《${esc(label)}》体系</h1>
+
+            <div style="background:#fff;border:1px solid rgba(37,104,184,.12);border-radius:24px;box-shadow:0 20px 50px rgba(15,55,100,.08);margin-bottom:20px;overflow:hidden">
+              <div style="padding:14px 22px;border-bottom:1px solid rgba(37,104,184,.08)">
+                <h2 style="margin:0;font-size:17px;font-weight:800;color:#082b5f">学生信息</h2>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px 32px;padding:20px 22px;font-size:16px">
+                ${studentRowsHtml}
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid rgba(37,104,184,.12);border-radius:24px;box-shadow:0 20px 50px rgba(15,55,100,.08);overflow:hidden">
+              <table style="width:100%;border-collapse:collapse;font-size:15px">
+                <thead>
+                  <tr style="background:#eef5ff;border-bottom:1px solid rgba(37,104,184,.12)">
+                    ${['学校名字', '城市', '就读年级', '每年学费', '入学月份']
+                      .map(
+                        (h) =>
+                          `<th style="padding:14px 18px;text-align:left;font-size:14px;font-weight:800;color:#082b5f;white-space:nowrap">${h}</th>`
+                      )
+                      .join('')}
+                  </tr>
+                </thead>
+                <tbody>${tableRowsHtml}</tbody>
+              </table>
+            </div>
+          `
+          return wrapper
+        }
+
+        let imageIdx = 0
+        for (const g of groups) {
+          imageIdx++
+          const tag = `${g.label} (${imageIdx}/${groups.length})`
+
+          // 1) 抓取本体系下的 iframe
+          const introIframe = document.querySelector(
+            `section[data-curriculum-group="${g.cur}"] iframe.curriculum-intro-frame`
+          )
+          const schoolIframes = Array.from(
+            document.querySelectorAll(
+              `section[data-curriculum-group="${g.cur}"] iframe.school-detail-frame`
+            )
+          )
+
+          // 2) 并行预热图片代理
+          setExportingState({ active: true, label: `${tag} - 加载图片…` })
+          const allFrames = [introIframe, ...schoolIframes].filter(Boolean)
+          await Promise.all(
+            allFrames.map(async (f) => {
               try {
-                await rewriteImagesToProxy(doc)
+                const doc = f.contentDocument
+                if (doc?.body) await rewriteImagesToProxy(doc)
               } catch (e) {
                 console.warn('图片代理预热失败:', e)
               }
-            }
-          })
-        )
+            })
+          )
 
-        // 2) 汇总表：截隐藏的 reportRef DOM（纯 inline style，避开 Tailwind 4 oklch 兼容问题）
-        setExportingState({ active: true, label: '截取汇总表…' })
-        const summaryCanvas = await html2canvas(element, opts)
-
-        // 3) 每个学校详情依次截图（html2canvas 单次开销大，串行更稳）
-        const detailCanvases = []
-        for (let i = 0; i < iframes.length; i++) {
-          setExportingState({
-            active: true,
-            label: `截取学校详情 ${i + 1}/${iframes.length}…`,
-          })
+          // 3) 截图：header → 体系介绍 → 各学校
+          setExportingState({ active: true, label: `${tag} - 截取页头…` })
+          const headerEl = buildHiddenHeaderEl(g.label, g.schools)
+          document.body.appendChild(headerEl)
+          const canvases = []
           try {
-            const doc = iframes[i].contentDocument
-            if (!doc?.body) continue
-            const c = await html2canvas(doc.body, opts)
-            detailCanvases.push(c)
-          } catch (err) {
-            console.warn('截取 iframe 失败:', err)
+            canvases.push(await html2canvas(headerEl, opts))
+          } catch (e) {
+            console.warn('截 header 失败:', e)
           }
-        }
+          headerEl.remove()
 
-        // 4) 按最大宽度统一缩放 + 竖向拼接
-        setExportingState({ active: true, label: '拼接长图…' })
-        const all = [summaryCanvas, ...detailCanvases]
-        const targetWidth = Math.max(...all.map((c) => c.width))
-        const scaledHeights = all.map((c) => Math.round((c.height * targetWidth) / c.width))
-        const totalHeight = scaledHeights.reduce((s, h) => s + h, 0)
-
-        const final = document.createElement('canvas')
-        final.width = targetWidth
-        final.height = totalHeight
-        const ctx = final.getContext('2d')
-        ctx.fillStyle = '#ffffff'
-        ctx.fillRect(0, 0, targetWidth, totalHeight)
-
-        let y = 0
-        all.forEach((c, i) => {
-          ctx.drawImage(c, 0, y, targetWidth, scaledHeights[i])
-          y += scaledHeights[i]
-        })
-
-        // 5) 触发下载
-        setExportingState({ active: true, label: '生成下载…' })
-        await new Promise((resolve) => {
-          final.toBlob((blob) => {
-            if (!blob) {
-              alert('生成图片失败')
-              resolve()
-              return
+          if (introIframe?.contentDocument?.body) {
+            setExportingState({ active: true, label: `${tag} - 截取体系介绍…` })
+            try {
+              canvases.push(await html2canvas(introIframe.contentDocument.body, opts))
+            } catch (e) {
+              console.warn('截介绍失败:', e)
             }
-            const url = URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.download = '选校报告.png'
-            link.href = url
-            link.click()
-            setTimeout(() => URL.revokeObjectURL(url), 1000)
-            resolve()
-          }, 'image/png')
-        })
+          }
+
+          for (let si = 0; si < schoolIframes.length; si++) {
+            setExportingState({
+              active: true,
+              label: `${tag} - 截取学校 ${si + 1}/${schoolIframes.length}…`,
+            })
+            const doc = schoolIframes[si].contentDocument
+            if (!doc?.body) continue
+            try {
+              canvases.push(await html2canvas(doc.body, opts))
+            } catch (e) {
+              console.warn('截学校失败:', e)
+            }
+          }
+
+          if (canvases.length === 0) {
+            console.warn(`${g.label} 没有任何画布,跳过`)
+            continue
+          }
+
+          // 4) 拼接 + 下载
+          setExportingState({ active: true, label: `${tag} - 拼接下载…` })
+          const targetWidth = Math.max(...canvases.map((c) => c.width))
+          const scaledHeights = canvases.map((c) => Math.round((c.height * targetWidth) / c.width))
+          const totalHeight = scaledHeights.reduce((s, h) => s + h, 0)
+
+          const finalCanvas = document.createElement('canvas')
+          finalCanvas.width = targetWidth
+          finalCanvas.height = totalHeight
+          const ctx = finalCanvas.getContext('2d')
+          ctx.fillStyle = '#ffffff'
+          ctx.fillRect(0, 0, targetWidth, totalHeight)
+          let y = 0
+          canvases.forEach((c, i) => {
+            ctx.drawImage(c, 0, y, targetWidth, scaledHeights[i])
+            y += scaledHeights[i]
+          })
+
+          await new Promise((resolve) => {
+            finalCanvas.toBlob((blob) => {
+              if (!blob) {
+                console.warn(`${g.label} toBlob 失败`)
+                resolve()
+                return
+              }
+              const url = URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.download = `选校报告_${g.label}.png`
+              link.href = url
+              link.click()
+              setTimeout(() => URL.revokeObjectURL(url), 1000)
+              resolve()
+            }, 'image/png')
+          })
+
+          // 浏览器对快速连续下载有时会拦,中间稍微停一下
+          await new Promise((r) => setTimeout(r, 400))
+        }
       } catch (err) {
         console.error('导出长图失败:', err)
         alert('导出失败：' + (err?.message || err))
       } finally {
         setExportingState({ active: false, label: '' })
+      }
+    }
+
+    // 简单 HTML 转义，防 XSS
+    const esc = (s) =>
+      String(s ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+      }[c]))
+
+    // 构造一份自包含的报告 HTML：渐变蓝主题 + 顶部学生信息 + 5列汇总表 + 按体系分组的介绍/详情 iframe
+    const buildShareableHtml = () => {
+      const baseUrl = window.location.origin
+      const studentInfoHtml = [
+        ['学生姓名', studentInfo.name],
+        ['学生性别', studentInfo.gender],
+        ['入学年份', `${form.intake_year} 年`],
+        ['出生日期', dobDisplay],
+        ['国籍', studentInfo.nationality],
+        ['陪读家长', studentInfo.accompanyParent],
+        ['需要陪读签证', studentInfo.dependentVisa],
+        ['英语水平', studentInfo.englishLevel],
+        ['备注', studentInfo.notes],
+      ]
+        .map(
+          ([k, v]) => `
+            <div>
+              <span class="il">${esc(k)}：</span>
+              <span class="iv">${esc(v || '—')}</span>
+            </div>`
+        )
+        .join('')
+
+      const tableRowsHtml = schoolList
+        .map((school, i) => {
+          const t = formatTuition(school.tuition_amount)
+          const isLast = i === schoolList.length - 1
+          return `
+            <tr${isLast ? ' class="last"' : ''}>
+              <td class="bold">${esc(school.school_name_cn || '—')}</td>
+              <td>${esc(school.city || '—')}</td>
+              <td>${esc(school.grade_display || '—')}</td>
+              <td class="nowrap bold">${esc(t.myr)}</td>
+              <td>${esc(school.intake_months || '—')}</td>
+            </tr>`
+        })
+        .join('')
+
+      // 按体系分组渲染
+      const groupsHtml = CURRICULUM_ORDER.map((cur) => {
+        const group = schoolList.filter((s) => s.curriculum === cur)
+        if (group.length === 0) return ''
+        const introUrl = curriculumIntroUrlFor(cur)
+        const label = curriculumLabelFor(cur)
+        const introIframe = introUrl
+          ? `<div class="frame-card"><iframe src="${esc(baseUrl + introUrl)}" loading="lazy" title="${esc(label)} 体系介绍"></iframe></div>`
+          : ''
+        const schoolFrames = group
+          .map((s) => {
+            const d = detailUrlFor(s.school_name_en)
+            if (!d) return ''
+            return `<div class="frame-card"><iframe src="${esc(baseUrl + d)}" loading="lazy" title="${esc(s.school_name_cn || s.school_name_en)}"></iframe></div>`
+          })
+          .join('')
+        return `
+          <section class="cg">
+            <div class="title-row">
+              <span class="title-bar"></span>
+              <h2>《${esc(label)}》体系介绍 · 已选 ${group.length} 所</h2>
+            </div>
+            ${introIframe}
+            ${schoolFrames}
+          </section>`
+      }).join('')
+
+      const studentName = esc(studentInfo.name || '选校报告')
+
+      return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${studentName} · 选校报告</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(180deg, #f7fbff 0%, #edf5ff 100%);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    color: #243f63;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 36px 24px 64px; }
+  h1 { font-size: 30px; margin: 0 0 28px; font-weight: 900; color: #082b5f; letter-spacing: -0.025em; }
+  .card { background: #fff; border: 1px solid rgba(37,104,184,.12); border-radius: 24px; box-shadow: 0 20px 50px rgba(15,55,100,.08); margin-bottom: 24px; overflow: hidden; }
+  .card-header { padding: 14px 22px; border-bottom: 1px solid rgba(37,104,184,.08); font-size: 17px; font-weight: 800; color: #082b5f; }
+  .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 32px; padding: 20px 22px; font-size: 16px; }
+  @media (max-width: 720px) { .info-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .info-grid { grid-template-columns: 1fr; } }
+  .il { color: #667991; }
+  .iv { color: #082b5f; font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  thead tr { background: #eef5ff; border-bottom: 1px solid rgba(37,104,184,.12); }
+  th { padding: 14px 18px; text-align: left; font-weight: 800; color: #082b5f; white-space: nowrap; font-size: 14px; }
+  td { padding: 14px 18px; color: #243f63; border-bottom: 1px solid rgba(37,104,184,.06); }
+  tr.last td { border-bottom: none; }
+  td.bold { font-weight: 600; color: #082b5f; }
+  td.nowrap { white-space: nowrap; }
+  .footnote { font-size: 12px; color: #94a3b8; margin: 12px 0 0; }
+  .cg { margin-top: 40px; }
+  .title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .title-bar { width: 8px; height: 36px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+  .title-row h2 { margin: 0; color: #082b5f; font-size: 24px; font-weight: 900; letter-spacing: -0.025em; }
+  .frame-card { margin-top: 24px; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 50px rgba(15,55,100,.08); }
+  .frame-card:first-of-type { margin-top: 0; }
+  .frame-card iframe { width: 100%; border: 0; display: block; min-height: 1400px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>选校报告</h1>
+
+    <div class="card">
+      <div class="card-header">学生信息</div>
+      <div class="info-grid">${studentInfoHtml}</div>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>学校名字</th><th>城市</th><th>就读年级</th><th>每年学费</th><th>入学月份</th>
+            </tr>
+          </thead>
+          <tbody>${tableRowsHtml || '<tr><td colspan="5" style="text-align:center;color:#a1a1aa;padding:32px;">暂无选中的学校</td></tr>'}</tbody>
+        </table>
+      </div>
+    </div>
+    <p class="footnote">* 本表所列费用基于学校目前官方文件整理，实际费用可能随年度、政策及汇率变化而调整，最终收费标准以学校正式账单或录取通知书为准。</p>
+
+    ${groupsHtml}
+  </div>
+  <script>
+    // iframe 高度按内容自适应
+    document.querySelectorAll('iframe').forEach((f) => {
+      f.addEventListener('load', () => {
+        try {
+          const h = f.contentDocument && f.contentDocument.body && f.contentDocument.body.scrollHeight;
+          if (h) f.style.height = h + 'px';
+        } catch (e) {}
+      });
+    });
+  </script>
+</body>
+</html>`
+    }
+
+    const handleShareReport = async () => {
+      if (schoolList.length === 0) {
+        alert('请先选择至少一所学校')
+        return
+      }
+      setSharingState({ active: true, label: '生成中…' })
+      try {
+        const html = buildShareableHtml()
+        setSharingState({ active: true, label: '上传中…' })
+        const res = await fetch('/api/reports/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ html }),
+        })
+        const json = await res.json()
+        if (!res.ok || !json.url) {
+          throw new Error(json.error || '上传失败')
+        }
+        setShareUrl(json.url)
+      } catch (err) {
+        console.error('生成分享链接失败:', err)
+        alert('生成失败：' + (err?.message || err))
+      } finally {
+        setSharingState({ active: false, label: '' })
+      }
+    }
+
+    // 共享 iframe onLoad 处理：注入打印样式 + 自适应高度（学校详情和体系介绍 iframe 共用）
+    const handleDetailFrameLoad = (e) => {
+      try {
+        const doc = e.target.contentDocument
+        if (!doc) return
+        const PRINT_CSS = `
+          @media print {
+            @page { size: A4; margin: 10mm; }
+            html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+            .page { width: 100% !important; max-width: 100% !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; background: #fff !important; box-shadow: none !important; }
+            .hero-card { height: 200px !important; box-shadow: none !important; }
+            .school-name-cn { font-size: 28px !important; }
+            .school-name-en { font-size: 16px !important; margin-top: 8px !important; }
+            .curriculum-tags { margin-top: 12px !important; }
+            .curriculum-tags span { font-size: 13px !important; padding: 6px 14px !important; }
+            .location-pill { margin-top: 12px !important; padding: 8px 16px !important; font-size: 14px !important; }
+            .hero-content { left: 24px !important; top: 24px !important; right: 24px !important; bottom: 20px !important; }
+            section { margin-top: 20px !important; }
+            .section-title-row h2 { font-size: 22px !important; }
+            .intro-text { font-size: 14px !important; line-height: 1.6 !important; }
+            .stat-value { font-size: 20px !important; }
+            .stat-label { font-size: 12px !important; }
+            .advantage-card h3 { font-size: 16px !important; }
+            .advantage-card p { font-size: 13px !important; }
+            .curriculum-card h3 { font-size: 20px !important; }
+            .curriculum-card p { font-size: 13px !important; }
+            .curriculum-age { font-size: 14px !important; margin-bottom: 10px !important; }
+            .activity-title { font-size: 13px !important; }
+            .campus-card { height: 120px !important; }
+            .hero-card, .intro-card, .advantage-card, .campus-card, .curriculum-card, .activity-card {
+              break-inside: avoid !important; page-break-inside: avoid !important; box-shadow: none !important;
+            }
+            * { box-shadow: none !important; }
+          }
+        `
+        if (!doc.querySelector('style[data-print-injected]')) {
+          const style = doc.createElement('style')
+          style.setAttribute('data-print-injected', 'true')
+          style.textContent = PRINT_CSS
+          doc.head.appendChild(style)
+        }
+        const h = doc.body?.scrollHeight
+        if (h) e.target.style.height = h + 'px'
+      } catch (_) {}
+    }
+
+    const copyToClipboard = async (text) => {
+      try {
+        await navigator.clipboard.writeText(text)
+        alert('已复制到剪贴板')
+      } catch {
+        // 老浏览器兜底
+        const ta = document.createElement('textarea')
+        ta.value = text
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+        alert('已复制到剪贴板')
       }
     }
 
@@ -655,6 +1015,56 @@ export default function Home() {
 
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+        {/* ── 分享链接弹窗 ── */}
+        {shareUrl && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 print:hidden"
+            onClick={() => setShareUrl(null)}
+          >
+            <div
+              className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-zinc-800"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                ✅ 分享链接已生成
+              </h3>
+              <p className="mb-4 text-sm text-zinc-600 dark:text-zinc-400">
+                把下面的链接发给对方，他们打开就能看到完整的选校报告。
+              </p>
+              <div className="mb-4 flex items-center gap-2 rounded-md border border-zinc-300 bg-zinc-50 px-3 py-2 dark:border-zinc-600 dark:bg-zinc-700">
+                <input
+                  readOnly
+                  value={shareUrl}
+                  className="flex-1 bg-transparent text-sm text-zinc-800 outline-none dark:text-zinc-200"
+                  onFocus={(e) => e.target.select()}
+                />
+                <button
+                  onClick={() => copyToClipboard(shareUrl)}
+                  className="rounded bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
+                >
+                  复制
+                </button>
+              </div>
+              <div className="flex justify-between gap-2">
+                <a
+                  href={shareUrl}
+                  target="_blank"
+                  rel="noopener"
+                  className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                >
+                  在新标签打开预览
+                </a>
+                <button
+                  onClick={() => setShareUrl(null)}
+                  className="rounded-md bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900"
+                >
+                  关闭
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* ── 手机端提示 ── */}
         <div className="flex flex-col items-center justify-center px-6 py-16 text-center md:hidden">
           <div className="mb-4 text-4xl">💻</div>
@@ -688,214 +1098,240 @@ export default function Home() {
                 </button>
                 <button
                   onClick={handleExportLongImage}
-                  disabled={exportingState.active}
+                  disabled={exportingState.active || sharingState.active}
                   className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 min-w-[180px]"
                 >
                   {exportingState.active ? `⏳ ${exportingState.label}` : '📷 导出长图'}
                 </button>
+                <button
+                  onClick={handleShareReport}
+                  disabled={exportingState.active || sharingState.active}
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 min-w-[180px]"
+                >
+                  {sharingState.active ? `⏳ ${sharingState.label}` : '🔗 生成分享链接'}
+                </button>
               </div>
             </div>
 
-            {/* 报告内容区（屏幕显示用 Tailwind） */}
-            <div className="bg-zinc-50 dark:bg-zinc-900">
-            <h1 className="mb-5 text-xl font-semibold text-zinc-900 dark:text-zinc-100">选校报告</h1>
+            {/* 报告内容区 - 渐变蓝主题 */}
+            <div
+              style={{
+                background: 'linear-gradient(180deg, #f7fbff 0%, #edf5ff 100%)',
+                fontFamily:
+                  '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif',
+                color: '#243f63',
+                padding: '32px 24px 64px',
+                borderRadius: 24,
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: 28,
+                  fontWeight: 900,
+                  color: '#082b5f',
+                  margin: '0 0 28px',
+                  letterSpacing: '-0.025em',
+                }}
+              >
+                选校报告
+              </h1>
 
-            {/* 学生信息 */}
-            <div className="mb-6 rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800">
-              <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-700">
-                <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">学生信息</h2>
-              </div>
-              <div className="grid grid-cols-3 gap-x-6 gap-y-3 px-4 py-4 text-sm">
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">学生姓名：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.name || '—'}</span>
+              {/* 学生信息卡 */}
+              <div
+                style={{
+                  background: '#fff',
+                  border: '1px solid rgba(37,104,184,.12)',
+                  borderRadius: 24,
+                  boxShadow: '0 20px 50px rgba(15,55,100,.08)',
+                  marginBottom: 24,
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{ padding: '14px 22px', borderBottom: '1px solid rgba(37,104,184,.08)' }}>
+                  <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: '#082b5f' }}>学生信息</h2>
                 </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">学生性别：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.gender || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">入学年份：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{form.intake_year} 年</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">出生日期：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{dobDisplay}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">国籍：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.nationality || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">陪读家长：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.accompanyParent || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">需要陪读签证：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.dependentVisa || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">英语水平：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.englishLevel || '—'}</span>
-                </div>
-                <div>
-                  <span className="text-zinc-500 dark:text-zinc-400">备注：</span>
-                  <span className="text-zinc-900 dark:text-zinc-100">{studentInfo.notes || '—'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 学校汇总表 */}
-            <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-700/60">
-                    {['编号', '学校名字', '城市', '课程体系', '就读年级', '是否有住宿', '是否提供签证', '每年学费', '入学月份'].map(
-                      (h) => (
-                        <th
-                          key={h}
-                          className="whitespace-nowrap px-3 py-3 text-left text-xs font-semibold text-zinc-600 dark:text-zinc-300"
-                        >
-                          {h}
-                        </th>
-                      )
-                    )}
-                  </tr>
-                </thead>
-                <tbody>
-                  {schoolList.length === 0 ? (
-                    <tr>
-                      <td colSpan={9} className="py-8 text-center text-zinc-400">
-                        暂无选中的学校
-                      </td>
-                    </tr>
-                  ) : (
-                    schoolList.map((school, index) => {
-                      const t = formatTuition(school.tuition_amount)
-                      return (
-                        <tr
-                          key={index}
-                          className="border-b border-zinc-100 last:border-0 dark:border-zinc-700"
-                        >
-                          <td className="px-3 py-3 text-zinc-500 dark:text-zinc-400">{index + 1}</td>
-                          <td className="px-3 py-3 font-medium text-zinc-900 dark:text-zinc-100">
-                            {school.school_name_cn || '—'}
-                          </td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">{school.city || '—'}</td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">{school.curriculum || '—'}</td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">
-                            {school.grade_display || '—'}
-                          </td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">{school.room || '—'}</td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">{school.visa || '—'}</td>
-                          <td className="whitespace-nowrap px-3 py-3 text-zinc-700 dark:text-zinc-300">
-                            {t.myr}
-                          </td>
-                          <td className="px-3 py-3 text-zinc-700 dark:text-zinc-300">
-                            {school.intake_months || '—'}
-                          </td>
-                        </tr>
-                      )
-                    })
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">
-              * 本表所列费用基于学校目前官方文件整理，实际费用可能随年度、政策及汇率变化而调整，最终收费标准以学校正式账单或录取通知书为准。
-            </p>
-
-            {/* 学校详情区（每所选中且有详情文件的学校占一页） */}
-            {schoolList.map((school, idx) => {
-              const url = detailUrlFor(school.school_name_en)
-              if (!url) return null
-              return (
                 <div
-                  key={`detail-${idx}`}
                   style={{
-                    pageBreakBefore: 'always',
-                    breakBefore: 'page',
-                    breakInside: 'avoid',
-                    marginTop: '32px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '14px 32px',
+                    padding: '20px 22px',
+                    fontSize: 16,
                   }}
                 >
-                  <iframe
-                    src={url}
-                    title={school.school_name_cn || school.school_name_en}
-                    className="school-detail-frame"
-                    style={{ width: '100%', border: 0, display: 'block' }}
-                    onLoad={(e) => {
-                      try {
-                        const doc = e.target.contentDocument
-                        if (!doc) return
-
-                        // 1) 注入 A4 友好的打印样式：缩放、避免卡片切半、去掉阴影
-                        const PRINT_CSS = `
-                          @media print {
-                            @page { size: A4; margin: 10mm; }
-                            html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-                            .page {
-                              width: 100% !important;
-                              max-width: 100% !important;
-                              min-height: 0 !important;
-                              padding: 0 !important;
-                              margin: 0 !important;
-                              background: #fff !important;
-                              box-shadow: none !important;
-                            }
-                            .hero-card { height: 200px !important; box-shadow: none !important; }
-                            .school-name-cn { font-size: 28px !important; }
-                            .school-name-en { font-size: 16px !important; margin-top: 8px !important; }
-                            .curriculum-tags { margin-top: 12px !important; }
-                            .curriculum-tags span { font-size: 13px !important; padding: 6px 14px !important; }
-                            .location-pill { margin-top: 12px !important; padding: 8px 16px !important; font-size: 14px !important; }
-                            .hero-content { left: 24px !important; top: 24px !important; right: 24px !important; bottom: 20px !important; }
-                            section { margin-top: 20px !important; }
-                            .section-title-row h2 { font-size: 22px !important; }
-                            .intro-text { font-size: 14px !important; line-height: 1.6 !important; }
-                            .stat-value { font-size: 20px !important; }
-                            .stat-label { font-size: 12px !important; }
-                            .advantage-card h3 { font-size: 16px !important; }
-                            .advantage-card p { font-size: 13px !important; }
-                            .curriculum-card h3 { font-size: 20px !important; }
-                            .curriculum-card p { font-size: 13px !important; }
-                            .curriculum-age { font-size: 14px !important; margin-bottom: 10px !important; }
-                            .activity-title { font-size: 13px !important; }
-                            .campus-card { height: 120px !important; }
-                            /* 关键：避免在卡片中间分页 */
-                            .hero-card,
-                            .intro-card,
-                            .advantage-card,
-                            .campus-card,
-                            .curriculum-card,
-                            .activity-card {
-                              break-inside: avoid !important;
-                              page-break-inside: avoid !important;
-                              box-shadow: none !important;
-                            }
-                            * { box-shadow: none !important; }
-                          }
-                        `
-                        // 避免重复注入（HMR / 重渲染时）
-                        if (!doc.querySelector('style[data-print-injected]')) {
-                          const style = doc.createElement('style')
-                          style.setAttribute('data-print-injected', 'true')
-                          style.textContent = PRINT_CSS
-                          doc.head.appendChild(style)
-                        }
-
-                        // 2) 屏幕显示用：高度按内容自适应（打印时 globals.css 会把 height 强制为 auto）
-                        const h = doc.body?.scrollHeight
-                        if (h) e.target.style.height = h + 'px'
-                      } catch (_) {
-                        // 跨域或未就绪，忽略
-                      }
-                    }}
-                  />
+                  {[
+                    ['学生姓名', studentInfo.name],
+                    ['学生性别', studentInfo.gender],
+                    ['入学年份', `${form.intake_year} 年`],
+                    ['出生日期', dobDisplay],
+                    ['国籍', studentInfo.nationality],
+                    ['陪读家长', studentInfo.accompanyParent],
+                    ['需要陪读签证', studentInfo.dependentVisa],
+                    ['英语水平', studentInfo.englishLevel],
+                    ['备注', studentInfo.notes],
+                  ].map(([label, value]) => (
+                    <div key={label}>
+                      <span style={{ color: '#667991' }}>{label}：</span>
+                      <span style={{ color: '#082b5f', fontWeight: 600 }}>{value || '—'}</span>
+                    </div>
+                  ))}
                 </div>
-              )
-            })}
+              </div>
+
+              {/* 学校汇总表 - 5 列 */}
+              <div
+                style={{
+                  background: '#fff',
+                  border: '1px solid rgba(37,104,184,.12)',
+                  borderRadius: 24,
+                  boxShadow: '0 20px 50px rgba(15,55,100,.08)',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
+                    <thead>
+                      <tr style={{ background: '#eef5ff', borderBottom: '1px solid rgba(37,104,184,.12)' }}>
+                        {['学校名字', '城市', '就读年级', '每年学费', '入学月份'].map((h) => (
+                          <th
+                            key={h}
+                            style={{
+                              padding: '14px 18px',
+                              textAlign: 'left',
+                              fontSize: 14,
+                              fontWeight: 800,
+                              color: '#082b5f',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {schoolList.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} style={{ padding: '32px', textAlign: 'center', color: '#a1a1aa' }}>
+                            暂无选中的学校
+                          </td>
+                        </tr>
+                      ) : (
+                        schoolList.map((school, i) => {
+                          const t = formatTuition(school.tuition_amount)
+                          const isLast = i === schoolList.length - 1
+                          return (
+                            <tr
+                              key={i}
+                              style={{ borderBottom: isLast ? 'none' : '1px solid rgba(37,104,184,.06)' }}
+                            >
+                              <td style={{ padding: '14px 18px', fontWeight: 600, color: '#082b5f' }}>
+                                {school.school_name_cn || '—'}
+                              </td>
+                              <td style={{ padding: '14px 18px', color: '#243f63' }}>{school.city || '—'}</td>
+                              <td style={{ padding: '14px 18px', color: '#243f63' }}>
+                                {school.grade_display || '—'}
+                              </td>
+                              <td
+                                style={{
+                                  padding: '14px 18px',
+                                  color: '#243f63',
+                                  whiteSpace: 'nowrap',
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {t.myr}
+                              </td>
+                              <td style={{ padding: '14px 18px', color: '#243f63' }}>
+                                {school.intake_months || '—'}
+                              </td>
+                            </tr>
+                          )
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <p style={{ marginTop: 12, fontSize: 12, color: '#94a3b8' }}>
+                * 本表所列费用基于学校目前官方文件整理，实际费用可能随年度、政策及汇率变化而调整，最终收费标准以学校正式账单或录取通知书为准。
+              </p>
+
+              {/* 按体系分组的详情区 */}
+              {CURRICULUM_ORDER.map((cur) => {
+                const group = schoolList.filter((s) => s.curriculum === cur)
+                if (group.length === 0) return null
+                const introUrl = curriculumIntroUrlFor(cur)
+                const label = curriculumLabelFor(cur)
+                return (
+                  <section key={cur} data-curriculum-group={cur} style={{ marginTop: 40 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 18 }}>
+                      <span
+                        style={{
+                          width: 8,
+                          height: 36,
+                          borderRadius: 999,
+                          background: 'linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%)',
+                          flex: '0 0 auto',
+                        }}
+                      />
+                      <h2
+                        style={{
+                          margin: 0,
+                          color: '#082b5f',
+                          fontSize: 24,
+                          fontWeight: 900,
+                          letterSpacing: '-0.025em',
+                        }}
+                      >
+                        《{label}》体系介绍 · 已选 {group.length} 所
+                      </h2>
+                    </div>
+                    {introUrl && (
+                      <div
+                        style={{
+                          marginBottom: 24,
+                          borderRadius: 24,
+                          overflow: 'hidden',
+                          boxShadow: '0 20px 50px rgba(15,55,100,.08)',
+                        }}
+                      >
+                        <iframe
+                          src={introUrl}
+                          className="curriculum-intro-frame"
+                          title={`${label} 体系介绍`}
+                          style={{ width: '100%', border: 0, display: 'block' }}
+                          onLoad={handleDetailFrameLoad}
+                        />
+                      </div>
+                    )}
+                    {group.map((school, idx) => {
+                      const url = detailUrlFor(school.school_name_en)
+                      if (!url) return null
+                      return (
+                        <div
+                          key={`detail-${cur}-${idx}`}
+                          style={{
+                            marginTop: 24,
+                            borderRadius: 24,
+                            overflow: 'hidden',
+                            boxShadow: '0 20px 50px rgba(15,55,100,.08)',
+                          }}
+                        >
+                          <iframe
+                            src={url}
+                            className="school-detail-frame"
+                            title={school.school_name_cn || school.school_name_en}
+                            style={{ width: '100%', border: 0, display: 'block' }}
+                            onLoad={handleDetailFrameLoad}
+                          />
+                        </div>
+                      )
+                    })}
+                  </section>
+                )
+              })}
             </div>
 
             {/* ── 隐藏的 PDF 专用 div（纯 inline style，无 Tailwind，无 oklch 问题） ── */}

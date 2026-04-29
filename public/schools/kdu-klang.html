@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KDU国际学校巴生校区</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eaf3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 24px 54px rgba(7, 39, 84, 0.18);
+      background: #d9e8f7;
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.90) 0%, rgba(6, 31, 62, 0.62) 43%, rgba(6, 31, 62, 0.12) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 92%;
+      color: #ffffff;
+      font-size: clamp(32px, 3.8vw, 50px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 76%;
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 25px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+    .intro-text { margin: 0; color: #243f63; font-size: 24px; line-height: 1.78; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 29px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: break-word; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 18px; bottom: 16px; padding: 11px 20px; border-radius: 999px; background: rgba(16,38,63,0.80); color: #ffffff; font-size: 19px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .curriculum-card { min-height: 245px; padding: 34px 32px; border-radius: 30px; background: #ffffff; border: 1px solid rgba(37,104,184,0.12); box-shadow: 0 18px 42px rgba(15,55,100,0.07); }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.02em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 34px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 20px; line-height: 1.7; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-section { margin-top: 46px; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card { min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37,104,184,0.13); box-shadow: 0 10px 24px rgba(15,55,100,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 900px) { .page { padding: 28px 18px 42px; } .curriculum-grid { grid-template-columns: repeat(2, 1fr); } .school-name-cn { font-size: 33px; max-width: 100%; } .school-name-en { max-width: 92%; font-size: 21px; } }
+    @media (max-width: 760px) { .hero-card { height: 330px; border-radius: 28px; } .hero-content { left: 26px; top: 40px; right: 26px; } .curriculum-tags span { font-size: 16px; padding: 10px 18px; } .location-pill { font-size: 16px; padding: 12px 18px; } .intro-card { padding: 26px; } .intro-text { font-size: 18px; line-height: 1.75; } .intro-stats-grid { grid-template-columns: repeat(2, 1fr); } .stat-value { font-size: 24px; } .advantages-grid { grid-template-columns: 1fr; } .campus-gallery { grid-template-columns: repeat(2, 1fr); } .campus-card { height: 150px; } .activities-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .curriculum-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://srikdu.edu.my/klang/wp-content/uploads/2023/10/01.jpg" alt="学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">KDU国际学校巴生校区</h1>
+          <div class="school-name-en">Sri KDU International School · Klang</div>
+          <div class="curriculum-tags"><span>EYFS</span><span>Cambridge</span><span>IGCSE</span></div>
+          <div class="location-pill">📍 Klang · Selangor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">Sri KDU International School Klang 位于雪兰莪巴生，提供以英国课程与剑桥体系为核心的国际教育路径，覆盖幼儿、幼小与中学阶段。校园配置学习空间、图书馆、实验室、创客空间、泳池、球场与运动场，并强调科技、创新与数字领导力培养。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2020</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–16</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">有住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">Cambridge</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">💻</div><div><h3>数字领导力定位</h3><p>学校将科技与创新融入学习体验，设有创客空间、电脑实验室及创新中心，支持编码、设计与项目式学习。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">📚</div><div><h3>英国与剑桥路径</h3><p>早年阶段采用 EYFS，随后衔接 Cambridge Primary、Secondary，并以 IGCSE 作为中学阶段核心升学资格。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏊</div><div><h3>完整运动设施</h3><p>校园配有游泳池、篮球与五人制足球场、足球场及跑道，支持体育课程、训练与团队协作发展。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🌏</div><div><h3>双语与本土连接</h3><p>学校提供英语环境，并结合中文与马来语学习，帮助学生在国际课程中保留多语言与本地文化连接。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://srikdu.edu.my/klang/wp-content/uploads/2023/10/03.jpg" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/klang/wp-content/uploads/2023/04/academic_facilites_ibrary-1.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/klang/wp-content/uploads/2023/04/sport_facilites_swimming-pool.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/klang/wp-content/uploads/2023/04/sport_facilites_football-court.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+      <section class="curriculum-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课程体系</h2></div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card"><div class="curriculum-age">3–5岁</div><h3>EYFS</h3><p>早年阶段围绕英国幼儿基础阶段框架，重视语言、社交、探索式学习与基础学习习惯培养。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">5–11岁</div><h3>Cambridge Primary</h3><p>小学阶段以剑桥小学课程为主线，结合英语、数学、科学及主题探究，建立中学学习所需的知识与技能。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">11–16岁</div><h3>Cambridge IGCSE</h3><p>中学阶段衔接 Cambridge Secondary，并在高年级准备 IGCSE，帮助学生获得国际认可的中学阶段学术资格。</p></div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课外活动</h2></div>
+        <div class="activities-grid">
+          <div class="activity-card"><div class="activity-icon">⚽</div><div class="activity-title">足球</div></div>
+          <div class="activity-card"><div class="activity-icon">🏊</div><div class="activity-title">游泳</div></div>
+          <div class="activity-card"><div class="activity-icon">🤖</div><div class="activity-title">机器人与编程</div></div>
+          <div class="activity-card"><div class="activity-icon">🎭</div><div class="activity-title">戏剧与表演</div></div>
+          <div class="activity-card"><div class="activity-icon">🥋</div><div class="activity-title">跆拳道</div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

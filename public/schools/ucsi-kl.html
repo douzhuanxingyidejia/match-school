@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UCSI思特雅国际学校吉隆坡校区</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #eaf3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #d8e6f7;
+      box-shadow: 0 26px 64px rgba(12, 48, 91, 0.16);
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.88) 0%, rgba(6, 31, 62, 0.58) 42%, rgba(6, 31, 62, 0.18) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 96%;
+      color: #ffffff;
+      font-size: clamp(30px, 3.5vw, 45px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 76%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #ffffff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    section { width: 100%; }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+    .intro-text { margin: 0; color: #243f63; font-size: 24px; line-height: 1.78; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 30px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: break-word; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 16px; bottom: 16px; padding: 11px 18px; border-radius: 999px; background: rgba(16,38,63,0.80); color: #fff; font-size: 18px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .curriculum-card { min-height: 245px; padding: 34px 32px; border-radius: 30px; background: #ffffff; border: 1px solid rgba(37,104,184,0.12); box-shadow: 0 18px 42px rgba(15,55,100,0.07); }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.08em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 34px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 20px; line-height: 1.7; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-section { margin-top: 46px; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card { min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37,104,184,0.13); box-shadow: 0 10px 24px rgba(15,55,100,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 760px) {
+      .page { padding: 24px 18px 36px; }
+      .hero-card { height: 390px; border-radius: 28px; }
+      .hero-content { left: 28px; top: 38px; right: 24px; }
+      .school-name-cn { font-size: 29px; max-width: 100%; }
+      .school-name-en { max-width: 90%; font-size: 20px; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
+      .location-pill { font-size: 16px; padding: 12px 18px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-value { font-size: 24px; }
+      .campus-card { height: 150px; }
+    }
+    @media (max-width: 560px) {
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #ffffff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://www.ucsiinternationalschool.edu.my/kl/wp-content/uploads/sites/3/2021/06/Student-Hangout-Area-1-p3yextuandysviy1nfqkbudfz00ak5dkv54jk9z1vo.jpg" alt="学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">UCSI思特雅国际学校吉隆坡校区</h1>
+          <div class="school-name-en">UCSI International School · Kuala Lumpur</div>
+          <div class="curriculum-tags">
+            <span>IEYC</span>
+            <span>IPC</span>
+            <span>Cambridge Primary</span>
+            <span>IGCSE</span>
+          </div>
+          <div class="location-pill">📍 Cheras · Kuala Lumpur</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">UCSI思特雅国际学校吉隆坡校区位于吉隆坡Cheras，提供从幼儿阶段至中学IGCSE阶段的国际课程路径。学校在小学阶段结合IPC与Cambridge Primary，中学阶段衔接Cambridge Lower Secondary与IGCSE，并将科技、创意、品格教育及多元语言学习融入日常学习。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2021</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–16</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">有住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">Apple Distinguished School</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">📘</div><div><h3>清晰的Cambridge升学路径</h3><p>幼儿阶段以IEYC启蒙，小学结合IPC与Cambridge Primary，中学以IGCSE作为主要考试与升学基础。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">💻</div><div><h3>科技与创意学习资源</h3><p>学校将Apple教育资源、编码、机器人与IT技能融入课程及课外学习，强化学生面向未来的数字能力。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🌍</div><div><h3>多元师生社群</h3><p>学生来自40多个国籍，教师团队来自17个以上国家，为学生提供跨文化学习与交流环境。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏊</div><div><h3>运动、实验与表演空间</h3><p>校园配备泳池、运动场、科学实验室、音乐室、创意艺术空间与表演艺术礼堂，支持课堂内外学习。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://www.ucsiinternationalschool.edu.my/kl/wp-content/uploads/sites/3/2021/06/Playground-p3yc1s3g4lj5pg2y7ym9tllkqiulibb885em4m8wn8.png" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://www.ucsiinternationalschool.edu.my/kl/wp-content/uploads/sites/3/2023/01/Library-scaled.jpeg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://www.ucsiinternationalschool.edu.my/kl/wp-content/uploads/sites/3/2021/06/Swimming-Pool-ozospfi2y8yhwxya2dqnn3vdwddrra8i326hj4bqys-300x214.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://www.ucsiinternationalschool.edu.my/kl/wp-content/uploads/sites/3/2021/06/Multi-purpose-Sports-Court-ozp4afmgx9syl68c24t9bdm5980xl8pl31a95c14jo.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+      <section class="curriculum-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课程体系</h2></div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card"><div class="curriculum-age">3–5岁</div><h3>IEYC</h3><p>幼儿阶段采用International Early Years Curriculum，并结合Cambridge英语、数学与科学，为早期读写、探究与社交情绪发展打基础。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">5–11岁</div><h3>IPC & Cambridge Primary</h3><p>小学阶段结合国际小学课程与Cambridge Primary，覆盖科学、数学、英语、ICT、音乐、体育、游泳与Makerspace等学习领域。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">11–14岁</div><h3>Cambridge Lower Secondary</h3><p>Year 7–9延续小学基础，学习英语、数学、科学、ICT、人文、艺术、体育、戏剧、音乐及语言课程，并为IGCSE选科做准备。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">14–16岁</div><h3>Cambridge IGCSE</h3><p>Year 10–11进入两年制IGCSE考试课程，学生通过学科选择与项目训练，发展探究、创意思维和解决问题能力。</p></div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课外活动</h2></div>
+        <div class="activities-grid">
+          <div class="activity-card"><div class="activity-icon">🏊</div><div class="activity-title">游泳</div></div>
+          <div class="activity-card"><div class="activity-icon">🤖</div><div class="activity-title">编程与机器人</div></div>
+          <div class="activity-card"><div class="activity-icon">🏅</div><div class="activity-title">体育活动</div></div>
+          <div class="activity-card"><div class="activity-icon">🎭</div><div class="activity-title">表演艺术</div></div>
+          <div class="activity-card"><div class="activity-icon">📚</div><div class="activity-title">学生社团</div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

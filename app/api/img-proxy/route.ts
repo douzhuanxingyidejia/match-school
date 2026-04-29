@@ -4,16 +4,59 @@ import { createClient } from '@supabase/supabase-js'
 
 export const runtime = 'nodejs'
 
-// 允许代理的图片域名白名单（学校官网 CDN）。新增学校时按需扩充。
+// 允许代理的图片域名白名单（学校官网 CDN + 体系介绍/学校详情用到的图床）。
+// 新增学校时若引入了新域名，把域名加进来。
 const ALLOWED_HOSTS = [
+  // 通用图床 / 体系介绍
+  'images.pexels.com',
+  'images.unsplash.com',
+  'static.wixstatic.com',
+  'cdn.tatlerasia.com',
+  'mint-edm.sgp1.digitaloceanspaces.com',
+  'chisedumy.swipepages.media',
+  'upload.wikimedia.org',
+  'studymalaysia.com',
+
+  // 各学校官网 CDN（按字母序）
+  'aism.edu.my',
   'alice-smith.edu.my',
   'www.alice-smith.edu.my',
+  'beaconhousesriinai.edu.my',
+  'cats-fc.org',
+  'catsglobalschools.com',
+  'event.epsomcollege.edu.my',
+  'fairview.edu.my',
   'gardenschool.edu.my',
   'www.gardenschool.edu.my',
+  'his.edu.my',
+  'matrixschools.edu.my',
+  'miskl.edu.my',
+  'old.raffles-american-school.edu.my',
+  'peninsula.edu.my',
+  'raffles-american-school.edu.my',
   'sji-international.edu.my',
   'cdn.sji-international.edu.my',
+  'sism.edu.my',
+  'srikdu.edu.my',
   'sunwayschools.edu.my',
   'www.sunwayschools.edu.my',
+  'www.charterhouse-htms.edu.my',
+  'www.concordcollege.edu.my',
+  'www.eaton.edu.my',
+  'www.elc.edu.my',
+  'www.kingsgate.edu.my',
+  'www.ktj.edu.my',
+  'www.marlboroughcollegemalaysia.org',
+  'www.mkis.edu.my',
+  'www.nexus.edu.my',
+  'www.nordangliaeducation.com',
+  'www.penangsisgroup.edu.my',
+  'www.powiis.edu.my',
+  'www.tenby.edu.my',
+  'www.tis.edu.my',
+  'www.tropicanacorp.com.my',
+  'www.ucsiinternationalschool.edu.my',
+  'www.uplands.org',
 ]
 
 const BUCKET = 'school-images'

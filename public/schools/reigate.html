@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reigate Grammar School Kuala Lumpur Profile</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #edf5ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      box-sizing: border-box;
+    }
+    .report-shell, .content-wrap, .main-content {
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+    }
+    .hero-card, .intro-card, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { width: 100%; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #dcecff;
+      box-shadow: 0 24px 58px rgba(8, 43, 95, 0.16);
+    }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.88) 0%, rgba(6, 31, 62, 0.58) 42%, rgba(6, 31, 62, 0.18) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 92%;
+      color: #ffffff;
+      font-size: clamp(32px, 4vw, 50px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+      text-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 72%;
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .curriculum-tags span {
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+    }
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .section-title-bar {
+      width: 8px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+    .section-title-row h2 {
+      margin: 0;
+      color: #082b5f;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 20px 50px rgba(15, 55, 100, 0.08);
+    }
+    .intro-text {
+      margin: 0;
+      color: #243f63;
+      font-size: 24px;
+      line-height: 1.75;
+      font-weight: 560;
+      letter-spacing: -0.025em;
+    }
+    .intro-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37, 104, 184, 0.14);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value {
+      color: #0f4fa3;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      word-break: break-word;
+    }
+    .stat-label {
+      margin-top: 12px;
+      color: #667991;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.10);
+      box-shadow: 0 16px 38px rgba(15, 55, 100, 0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #eef5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: 0 0 auto;
+    }
+    .advantage-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+    .advantage-card p {
+      margin: 10px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 560;
+    }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .campus-card {
+      position: relative;
+      height: 170px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #eaf2fb;
+      box-shadow: 0 16px 34px rgba(15, 55, 100, 0.08);
+    }
+    .campus-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .campus-label {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16, 38, 63, 0.80);
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+    }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .curriculum-card {
+      min-height: 245px;
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 18px 42px rgba(15, 55, 100, 0.07);
+    }
+    .curriculum-age {
+      color: #2b70bd;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .curriculum-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 34px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+    .curriculum-card p {
+      margin: 24px 0 0;
+      color: #52667f;
+      font-size: 20px;
+      line-height: 1.7;
+      font-weight: 560;
+      letter-spacing: -0.015em;
+    }
+    .activities-section { margin-top: 46px; }
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+    }
+    .activity-card {
+      min-height: 132px;
+      padding: 24px 16px;
+      border-radius: 22px;
+      background: #f6faff;
+      border: 1px solid rgba(37, 104, 184, 0.13);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title {
+      color: #0a2d5f;
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+    @media print {
+      body { background: #ffffff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; }
+    }
+    @media (max-width: 760px) {
+      .page { padding: 22px 18px 38px; }
+      .hero-card { height: 410px; border-radius: 28px; }
+      .hero-content { left: 26px; top: 34px; right: 24px; }
+      .school-name-cn { font-size: 31px; max-width: 100%; }
+      .school-name-en { max-width: 96%; font-size: 20px; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 15px; }
+      .location-pill { font-size: 17px; padding: 14px 20px; }
+      .section-title-row h2 { font-size: 30px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-value { font-size: 24px; }
+      .campus-card { height: 150px; }
+      .curriculum-card p { font-size: 18px; }
+    }
+    @media (max-width: 560px) {
+      .intro-stats-grid, .advantages-grid, .curriculum-grid, .activities-grid { grid-template-columns: 1fr; }
+      .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://static.wixstatic.com/media/461e95_185c315d414e4cda8df31b72f582fbdf~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/LES00474.jpg" alt="学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">Reigate Grammar国际学校</h1>
+          <div class="school-name-en">Reigate Grammar School Kuala Lumpur</div>
+          <div class="curriculum-tags">
+            <span>EYFS</span>
+            <span>British Curriculum</span>
+            <span>IGCSE</span>
+            <span>A-Level</span>
+          </div>
+          <div class="location-pill">📍 Kajang 2 · Selangor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">Reigate Grammar School Kuala Lumpur 位于雪兰莪 Kajang 2，是 Reigate Grammar School UK 与 Beaconhouse 合作发展的英国体系国际学校。学校提供从 Early Years 到 Sixth Form 的连续升学路径，课程衔接 IGCSE 与 A-Level，并强调学术进步、学生关怀与个性化支持。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2025</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–18</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">有住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">SMIPS注册</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>英国课程连续路径</h3><p>从 Early Years 到 Sixth Form 形成完整英国教育路径，学生在中学阶段衔接 IGCSE 与 A-Level。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏫</div><div><h3>RGS 与 Beaconhouse 合作</h3><p>学校承接 Reigate Grammar School UK 的教育传统，并由 Beaconhouse 集团在马来西亚共同发展。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🔬</div><div><h3>现代化学习设施</h3><p>校园配备科学实验室、两层图书馆、泳池、室内多用途空间、户外球场及攀岩墙等设施。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">💙</div><div><h3>重视学生关怀</h3><p>学校强调学生 wellbeing、导师支持、个别学习计划与生活技能教育，帮助学生建立信心与韧性。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://static.wixstatic.com/media/461e95_db1649c24abe4e209c2b2b85b279cde2~mv2.jpg/v1/fill/w_980%2Ch_1470%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/RSG%20Sep29-57.jpg" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://static.wixstatic.com/media/461e95_b887dc82049b41539a2743e977208281~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/Spirit%20of%20Creativity.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://static.wixstatic.com/media/461e95_dc6b92bb37af4557a93c3372cd31282a~mv2.jpg/v1/fill/w_980%2Ch_1470%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/LES07961%20%281%29.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://static.wixstatic.com/media/461e95_1efa30b1d2ab4980a664e93752778ced~mv2.jpg/v1/fill/w_980%2Ch_653%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/LES09518.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+      <section class="curriculum-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课程体系</h2></div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card"><div class="curriculum-age">3–5岁</div><h3>EYFS</h3><p>早期教育阶段重视探索、游戏化学习、语言表达与社交能力，为进入小学阶段建立学习习惯与基础能力。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">6–11岁</div><h3>Primary</h3><p>小学阶段覆盖英语、数学、科学、人文等核心学科，并结合音乐、艺术、语言与体育等专科教学。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">11–16岁</div><h3>IGCSE</h3><p>中学阶段沿英国课程推进，逐步进入 IGCSE 学习与考试准备，培养学科基础、批判思维与独立学习能力。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">16–18岁</div><h3>A-Level</h3><p>Sixth Form 阶段以 A-Level 为核心升学路径，并配合大学与职业指导，支持学生规划海外大学申请。</p></div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课外活动</h2></div>
+        <div class="activities-grid">
+          <div class="activity-card"><div class="activity-icon">🏅</div><div class="activity-title">体育活动</div></div>
+          <div class="activity-card"><div class="activity-icon">🎵</div><div class="activity-title">音乐</div></div>
+          <div class="activity-card"><div class="activity-icon">🎭</div><div class="activity-title">戏剧</div></div>
+          <div class="activity-card"><div class="activity-icon">🎨</div><div class="activity-title">创意艺术</div></div>
+          <div class="activity-card"><div class="activity-icon">🧭</div><div class="activity-title">体验式学习</div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

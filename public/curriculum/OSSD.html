@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加拿大课程体系全线介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #eaf2fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #243f63;
+    }
+
+    body { padding: 36px 18px; }
+
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      box-shadow: 0 28px 80px rgba(15, 55, 100, 0.14);
+      border-radius: 34px;
+      overflow: hidden;
+    }
+
+    .hero-card {
+      position: relative;
+      width: 100%;
+      height: 372px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #d9e7f8;
+      box-shadow: 0 24px 58px rgba(15, 55, 100, 0.15);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(6, 31, 62, 0.90) 0%,
+        rgba(6, 31, 62, 0.66) 45%,
+        rgba(6, 31, 62, 0.18) 100%
+      );
+    }
+
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 50px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.34);
+      color: rgba(255,255,255,0.94);
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      margin-bottom: 22px;
+      backdrop-filter: blur(10px);
+    }
+
+    .school-name-cn {
+      margin: 0;
+      max-width: 92%;
+      color: #ffffff;
+      font-size: clamp(40px, 4.8vw, 56px);
+      line-height: 1.08;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 82%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+    }
+
+    .curriculum-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .location-pill {
+      margin-top: 24px;
+      padding: 15px 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.96);
+      color: #0f2f5f;
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+
+    .section { margin-top: 42px; }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .section-title-bar {
+      width: 8px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+
+    .section-title-row h2 {
+      margin: 0;
+      color: #082b5f;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .intro-card,
+    .path-card,
+    .compare-card,
+    .planning-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+
+    .intro-text {
+      margin: 0;
+      color: #243f63;
+      font-size: 24px;
+      line-height: 1.82;
+      font-weight: 580;
+      letter-spacing: -0.025em;
+    }
+
+    .intro-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .intro-stat-card {
+      min-height: 112px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-value {
+      color: #0f4fa3;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-label {
+      margin-top: 12px;
+      color: #667991;
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 850;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .route-step {
+      position: relative;
+      min-height: 184px;
+      padding: 24px 20px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 14px 34px rgba(15,55,100,0.06);
+    }
+
+    .route-age {
+      color: #2b70bd;
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .route-step h3 {
+      margin: 16px 0 0;
+      color: #0a2d5f;
+      font-size: 27px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .route-step p {
+      margin: 16px 0 0;
+      color: #52667f;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 580;
+      letter-spacing: -0.01em;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-card {
+      position: relative;
+      height: 172px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #eaf2fb;
+      box-shadow: 0 16px 34px rgba(15,55,100,0.08);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-label {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16,38,63,0.82);
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .feature-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #eef5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: 0 0 auto;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 950;
+      letter-spacing: -0.025em;
+    }
+
+    .feature-card p {
+      margin: 10px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 570;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .compare-column {
+      padding: 30px;
+      border-radius: 28px;
+      background: #f6faff;
+      border: 1px solid rgba(37,104,184,0.12);
+    }
+
+    .compare-column h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 34px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+    }
+
+    .compare-column .subtitle {
+      margin-top: 8px;
+      color: #2b70bd;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 900;
+    }
+
+    .compare-list {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 16px;
+    }
+
+    .compare-list li {
+      padding-left: 24px;
+      position: relative;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.65;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .compare-list li::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #2b70bd;
+      position: absolute;
+      left: 0;
+      top: 12px;
+    }
+
+    .assessment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .assessment-card {
+      min-height: 260px;
+      padding: 30px 28px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .assessment-label {
+      color: #2b70bd;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    .assessment-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 29px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .assessment-card p {
+      margin: 20px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.68;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .grade-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .grade-item {
+      padding: 18px 14px;
+      border-radius: 20px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.13);
+      text-align: center;
+    }
+
+    .grade-score {
+      color: #0f4fa3;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .grade-desc {
+      margin-top: 10px;
+      color: #667991;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 850;
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .student-card {
+      min-height: 238px;
+      padding: 30px 28px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .student-type {
+      color: #2b70bd;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    .student-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 30px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .student-card p {
+      margin: 20px 0 0;
+      color: #52667f;
+      font-size: 19px;
+      line-height: 1.68;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .planning-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .planning-item {
+      padding: 24px 22px;
+      border-radius: 24px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.12);
+    }
+
+    .planning-item h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .planning-item p {
+      margin: 14px 0 0;
+      color: #52667f;
+      font-size: 17px;
+      line-height: 1.62;
+      font-weight: 570;
+      letter-spacing: -0.012em;
+    }
+
+    .system-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .system-feature-card {
+      padding: 30px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .system-feature-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .system-feature-card p {
+      margin: 16px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 570;
+      letter-spacing: -0.012em;
+    }
+
+    @media print {
+      body { padding: 0; background: #ffffff; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 0; }
+
+      .page {
+        border-radius: 0;
+        padding: 28px 22px 40px;
+      }
+
+      .hero-card { height: 430px; }
+
+      .hero-content {
+        left: 28px;
+        right: 28px;
+        top: 36px;
+      }
+
+      .school-name-cn {
+        font-size: 36px;
+        max-width: 100%;
+        white-space: normal;
+      }
+
+      .school-name-en {
+        max-width: 100%;
+        font-size: 21px;
+      }
+
+      .intro-stats-grid,
+      .gallery,
+      .planning-grid,
+      .grade-band {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .route-grid,
+      .student-grid,
+      .feature-grid,
+      .compare-grid,
+      .assessment-grid,
+      .system-feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .intro-stats-grid,
+      .gallery,
+      .planning-grid,
+      .grade-band {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title-row h2 { font-size: 30px; }
+      .intro-text { font-size: 20px; }
+      .gallery-card { height: 210px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero-card">
+      <img class="hero-image" src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="加拿大课程学习场景">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="eyebrow">CANADIAN CURRICULUM PATHWAY</div>
+        <h1 class="school-name-cn">加拿大课程体系全线介绍</h1>
+        <div class="school-name-en">Elementary · Middle School · OSSD High School Pathway</div>
+        <div class="curriculum-tags">
+          <span>Elementary</span>
+          <span>Middle School</span>
+          <span>OSSD</span>
+          <span>加拿大体系</span>
+        </div>
+        <div class="location-pill">📍 从小学、初中到 OSSD 高中毕业的完整加拿大课程路线</div>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>体系简介</h2>
+      </div>
+      <div class="intro-card">
+        <p class="intro-text">
+          加拿大课程体系通常从小学阶段的基础能力培养开始，逐步进入初中阶段的学科探索，并在高中阶段衔接 OSSD 等省级高中毕业文凭路径。整体学习强调持续评估、课堂参与、项目任务、学分积累和个性化选课，帮助学生从基础学习能力逐步过渡到大学申请准备。
+        </p>
+        <div class="intro-stats-grid">
+          <div class="intro-stat-card">
+            <div class="stat-value">1–12年级</div>
+            <div class="stat-label">完整学习阶段</div>
+          </div>
+          <div class="intro-stat-card">
+            <div class="stat-value">9–12年级</div>
+            <div class="stat-label">OSSD 高中阶段</div>
+          </div>
+          <div class="intro-stat-card">
+            <div class="stat-value">30学分</div>
+            <div class="stat-label">OSSD 毕业要求</div>
+          </div>
+          <div class="intro-stat-card">
+            <div class="stat-value">过程评估</div>
+            <div class="stat-label">核心学习特点</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>加拿大课程全线学习路线</h2>
+      </div>
+      <div class="path-card">
+        <div class="route-grid">
+          <div class="route-step">
+            <div class="route-age">6–11岁</div>
+            <h3>Elementary</h3>
+            <p>小学阶段重视英语读写、数学基础、科学探究、社会学习与课堂参与，帮助学生建立学习习惯。</p>
+          </div>
+          <div class="route-step">
+            <div class="route-age">11–14岁</div>
+            <h3>Middle School</h3>
+            <p>初中阶段逐步扩展学科广度，学生开始接触更系统的科学、人文、艺术、技术与项目式学习。</p>
+          </div>
+          <div class="route-step">
+            <div class="route-age">14–16岁</div>
+            <h3>Grade 9–10</h3>
+            <p>高中前两年进入学分体系，完成核心课程并观察不同学科表现，为高年级选课做准备。</p>
+          </div>
+          <div class="route-step">
+            <div class="route-age">16–18岁</div>
+            <h3>Grade 11–12</h3>
+            <p>高年级围绕大学专业方向选择关键课程，Grade 12 成绩通常会成为大学申请的重要参考。</p>
+          </div>
+          <div class="route-step">
+            <div class="route-age">高中毕业</div>
+            <h3>OSSD</h3>
+            <p>学生完成规定学分、社区服务及读写能力要求后，凭借高中成绩与申请材料衔接国际大学。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>学习场景</h2>
+      </div>
+      <div class="gallery">
+        <div class="gallery-card">
+          <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=900" alt="课堂学习">
+          <span class="gallery-label">课堂学习</span>
+        </div>
+        <div class="gallery-card">
+          <img src="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=900" alt="阅读研究">
+          <span class="gallery-label">阅读研究</span>
+        </div>
+        <div class="gallery-card">
+          <img src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=900" alt="小组讨论">
+          <span class="gallery-label">小组讨论</span>
+        </div>
+        <div class="gallery-card">
+          <img src="https://images.pexels.com/photos/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=900" alt="项目展示">
+          <span class="gallery-label">项目展示</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>体系特点</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎓</div>
+          <div>
+            <h3>学分制路径清晰</h3>
+            <p>加拿大课程从小学到高中逐步推进，高中阶段通过规定学分、必修课程和选修课程构成毕业路径。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div>
+            <h3>过程性评估占比高</h3>
+            <p>从小学到高中都重视课堂参与、作业、项目任务、测验与展示，高中阶段这种持续评估会更直接影响课程成绩。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧩</div>
+          <div>
+            <h3>课程选择灵活</h3>
+            <p>低龄阶段重视广泛探索，高中阶段逐步围绕数学、科学、商科、人文、艺术等方向形成选课规划。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌎</div>
+          <div>
+            <h3>与大学申请直接衔接</h3>
+            <p>小学和初中建立基础能力，高中阶段通过 OSSD 学分、课程成绩和 Grade 12 相关科目衔接大学申请。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>小学到高中阶段重点</h2>
+      </div>
+      <div class="compare-card">
+        <div class="compare-grid">
+          <div class="compare-column">
+            <h3>小学与初中</h3>
+            <div class="subtitle">建立基础能力与学习习惯</div>
+            <ul class="compare-list">
+              <li>小学阶段重视英语读写、数学基础、科学探究和课堂表达。</li>
+              <li>初中阶段逐步扩展学科广度，帮助学生识别兴趣与优势。</li>
+              <li>项目式学习、小组合作和课堂参与是常见学习方式。</li>
+              <li>这个阶段重点不是过早定专业，而是建立稳定学习能力。</li>
+            </ul>
+          </div>
+          <div class="compare-column">
+            <h3>高中与 OSSD</h3>
+            <div class="subtitle">通过学分与课程成绩衔接大学申请</div>
+            <ul class="compare-list">
+              <li>高中阶段进入学分体系，课程成绩会逐步影响升学规划。</li>
+              <li>OSSD 通常需要完成 30 个高中学分及相关毕业要求。</li>
+              <li>Grade 11–12 选课应与目标专业和大学申请方向匹配。</li>
+              <li>Grade 12 相关课程成绩通常是大学申请的重要参考。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>评分与学习方式</h2>
+      </div>
+      <div class="intro-card">
+        <div class="assessment-grid">
+          <div class="assessment-card">
+            <div class="assessment-label">COURSE ASSESSMENT</div>
+            <h3>以课程成绩为核心</h3>
+            <p>OSSD 通常以每门课程的最终成绩作为重要评价结果，学生需要持续完成课堂任务、作业、测验、项目、展示或考试。</p>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-label">PROCESS-BASED LEARNING</div>
+            <h3>过程性评估占比高</h3>
+            <p>平时表现、项目任务、作业、测验和课堂评估通常占较大比例，学生需要保持稳定节奏，而不是只依赖最后一次考试。</p>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-label">UNIVERSITY PREPARATION</div>
+            <h3>高年级课程影响申请</h3>
+            <p>大学申请通常重点参考高年级相关课程成绩。学生应根据目标专业提前选择 Grade 11–12 课程，并保持成绩稳定。</p>
+          </div>
+        </div>
+
+        <div class="grade-band">
+          <div class="grade-item">
+            <div class="grade-score">30学分</div>
+            <div class="grade-desc">OSSD 毕业学分要求</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">40小时</div>
+            <div class="grade-desc">社区服务要求</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">70%</div>
+            <div class="grade-desc">常见过程性评估</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">Grade 12</div>
+            <div class="grade-desc">大学申请重点年级</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>适合学生画像</h2>
+      </div>
+      <div class="student-grid">
+        <div class="student-card">
+          <div class="student-type">CREDIT-BASED ROUTE</div>
+          <h3>适合持续型学习者</h3>
+          <p>如果学生能够稳定完成作业、项目、课堂任务和阶段性评估，OSSD 的过程性评价方式更容易体现长期学习表现。</p>
+        </div>
+        <div class="student-card">
+          <div class="student-type">CANADIAN ROUTE</div>
+          <h3>目标加拿大方向</h3>
+          <p>如果学生未来重点考虑加拿大大学，加拿大课程体系可以帮助家庭更直接理解从基础教育到高中学分、选课和大学申请的衔接逻辑。</p>
+        </div>
+        <div class="student-card">
+          <div class="student-type">FLEXIBLE ROUTE</div>
+          <h3>希望保持选课弹性</h3>
+          <p>如果学生仍在探索专业方向，可以先在小学和初中阶段广泛建立基础，再通过 Grade 11–12 的课程选择逐步调整学科组合。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>规划建议</h2>
+      </div>
+      <div class="planning-card">
+        <div class="planning-grid">
+          <div class="planning-item">
+            <h3>小学阶段</h3>
+            <p>重点建立英语阅读、数学基础、课堂表达和学习习惯，不宜过早只关注升学结果。</p>
+          </div>
+          <div class="planning-item">
+            <h3>初中阶段</h3>
+            <p>通过科学、人文、艺术、技术和项目任务观察学生兴趣，逐步形成学科优势判断。</p>
+          </div>
+          <div class="planning-item">
+            <h3>Grade 9–10</h3>
+            <p>进入高中学分体系，完成核心课程，适应过程性评估与课程成绩管理。</p>
+          </div>
+          <div class="planning-item">
+            <h3>Grade 11–12</h3>
+            <p>围绕目标国家、大学专业和先修要求选择课程，并保持高年级成绩稳定。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>相对其他体系的特点</h2>
+      </div>
+      <div class="planning-card">
+        <div class="system-feature-grid">
+          <div class="system-feature-card">
+            <h3>更强调持续表现</h3>
+            <p>加拿大课程体系相比单次大考占比很高的体系，更重视学生从小学到高中阶段的持续完成度、课堂任务、项目表现和阶段性评估。</p>
+          </div>
+          <div class="system-feature-card">
+            <h3>选课弹性较高</h3>
+            <p>加拿大课程在低龄阶段提供广泛探索空间，高中阶段通过必修与选修学分帮助学生匹配未来专业方向。</p>
+          </div>
+          <div class="system-feature-card">
+            <h3>与加拿大大学衔接自然</h3>
+            <p>高中阶段的 OSSD 属于加拿大安省高中毕业文凭体系，对于计划申请加拿大大学的学生，课程结构和申请逻辑相对直接。</p>
+          </div>
+          <div class="system-feature-card">
+            <h3>适合稳步提升型学生</h3>
+            <p>如果学生不适合完全依赖最终大考，而更适合通过日常学习、项目任务和阶段性表现累积成绩，加拿大体系更容易体现学习过程。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

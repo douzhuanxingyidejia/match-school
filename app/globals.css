@@ -35,7 +35,8 @@ body {
     background: #fff !important;
   }
   /* 让 iframe 在打印时高度按内容自然流动，避免空白页 */
-  iframe.school-detail-frame {
+  iframe.school-detail-frame,
+  iframe.curriculum-intro-frame {
     width: 100% !important;
     height: auto !important;
     min-height: 0 !important;

@@ -6,8 +6,10 @@
   <title>双威国际学校吉隆坡校区</title>
   <style>
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: #edf5ff; }
+    html, body { margin: 0; padding: 0; }
     body {
+      min-height: 100vh;
+      background: #eaf2fb;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
       color: #52667f;
     }
@@ -18,28 +20,23 @@
       margin: 0 auto;
       padding: 42px 42px 56px;
       background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
-      box-shadow: 0 30px 90px rgba(13, 55, 103, 0.12);
     }
     .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; }
     .hero-card {
       position: relative;
       width: 100%;
+      max-width: none;
       height: 360px;
       border-radius: 34px;
       overflow: hidden;
-      background: #dbeaf8;
-      box-shadow: 0 26px 60px rgba(8, 43, 95, 0.18);
+      background: #dce9f7;
+      box-shadow: 0 24px 58px rgba(15,55,100,.14);
     }
-    .hero-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(6,31,62,0.90) 0%, rgba(6,31,62,0.62) 45%, rgba(6,31,62,0.14) 100%);
+      background: linear-gradient(90deg, rgba(6,31,62,.88) 0%, rgba(6,31,62,.58) 42%, rgba(6,31,62,.18) 100%);
     }
     .hero-content {
       position: absolute;
@@ -55,9 +52,9 @@
     }
     .school-name-cn {
       margin: 0;
-      max-width: 88%;
-      color: #ffffff;
-      font-size: clamp(34px, 4.2vw, 50px);
+      max-width: 96%;
+      color: #fff;
+      font-size: clamp(32px, 4.05vw, 50px);
       line-height: 1.08;
       font-weight: 900;
       letter-spacing: -0.055em;
@@ -66,26 +63,21 @@
     }
     .school-name-en {
       margin-top: 18px;
-      max-width: 76%;
-      color: rgba(255,255,255,0.94);
+      max-width: 78%;
+      color: rgba(255,255,255,.94);
       font-size: 25px;
       line-height: 1.35;
       font-weight: 780;
       letter-spacing: -0.025em;
     }
-    .curriculum-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 28px;
-    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
     .curriculum-tags span {
       padding: 12px 24px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.36);
-      color: #ffffff;
-      font-size: 18px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.36);
+      color: #fff;
+      font-size: 19px;
       font-weight: 850;
       line-height: 1;
       backdrop-filter: blur(10px);
@@ -94,19 +86,16 @@
       margin-top: 26px;
       padding: 16px 28px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,.95);
       color: #0f2f5f;
       font-size: 21px;
       font-weight: 850;
       line-height: 1.2;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+      box-shadow: 0 12px 28px rgba(0,0,0,.14);
     }
-    .section-title-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 22px;
-    }
+    section { width: 100%; }
+    .intro-section { margin-top: 34px; }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
     .section-title-bar {
       width: 8px;
       height: 42px;
@@ -122,68 +111,51 @@
       font-weight: 900;
       letter-spacing: -0.04em;
     }
-    .intro-section { margin-top: 34px; }
     .intro-card {
       width: 100%;
       padding: 34px;
       border-radius: 30px;
-      background: #ffffff;
-      border: 1px solid rgba(37,104,184,0.12);
-      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+      background: #fff;
+      border: 1px solid rgba(37,104,184,.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,.08);
     }
     .intro-text {
       margin: 0;
       color: #243f63;
       font-size: 25px;
-      line-height: 1.85;
+      line-height: 1.78;
       font-weight: 560;
       letter-spacing: -0.025em;
     }
-    .intro-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-top: 30px;
-    }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
     .intro-stat-card {
       min-height: 106px;
       padding: 22px 18px;
       border-radius: 22px;
       background: #eef5ff;
-      border: 1px solid rgba(37,104,184,0.14);
-      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      border: 1px solid rgba(37,104,184,.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,.05);
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
     .stat-value {
       color: #0f4fa3;
-      font-size: 30px;
+      font-size: 31px;
       line-height: 1.15;
       font-weight: 900;
       letter-spacing: -0.035em;
-      word-break: keep-all;
+      word-break: break-word;
     }
-    .stat-label {
-      margin-top: 12px;
-      color: #667991;
-      font-size: 17px;
-      line-height: 1.3;
-      font-weight: 800;
-    }
-    .advantages-section { margin-top: 42px; }
-    .advantages-grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section, .campus-section, .curriculum-section, .activities-section { margin-top: 44px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .advantage-card {
       padding: 28px 30px;
       border-radius: 28px;
-      background: #ffffff;
-      border: 1px solid rgba(37,104,184,0.10);
-      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      background: #fff;
+      border: 1px solid rgba(37,104,184,.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,.07);
       display: flex;
       gap: 20px;
       align-items: flex-start;
@@ -199,155 +171,84 @@
       font-size: 28px;
       flex: 0 0 auto;
     }
-    .advantage-card h3 {
-      margin: 0;
-      color: #0a2d5f;
-      font-size: 22px;
-      line-height: 1.3;
-      font-weight: 900;
-      letter-spacing: -0.025em;
-    }
-    .advantage-card p {
-      margin: 10px 0 0;
-      color: #52667f;
-      font-size: 18px;
-      line-height: 1.7;
-      font-weight: 560;
-    }
-    .campus-section { margin-top: 42px; }
-    .campus-gallery {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-    }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
     .campus-card {
       position: relative;
       height: 170px;
       border-radius: 24px;
       overflow: hidden;
       background: #eaf2fb;
-      box-shadow: 0 16px 34px rgba(15,55,100,0.08);
+      box-shadow: 0 16px 34px rgba(15,55,100,.08);
     }
-    .campus-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .campus-label {
       position: absolute;
-      left: 18px;
+      left: 16px;
       bottom: 16px;
       padding: 11px 18px;
       border-radius: 999px;
-      background: rgba(16,38,63,0.80);
-      color: #ffffff;
-      font-size: 18px;
+      background: rgba(16,38,63,.80);
+      color: #fff;
+      font-size: 19px;
       line-height: 1;
       font-weight: 900;
       letter-spacing: -0.02em;
       backdrop-filter: blur(8px);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+      box-shadow: 0 8px 18px rgba(0,0,0,.16);
     }
-    .curriculum-section { margin-top: 46px; }
-    .curriculum-grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     .curriculum-card {
       min-height: 245px;
       padding: 34px 30px;
       border-radius: 30px;
-      background: #ffffff;
-      border: 1px solid rgba(37,104,184,0.12);
-      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+      background: #fff;
+      border: 1px solid rgba(37,104,184,.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,.07);
     }
-    .curriculum-age {
-      color: #2b70bd;
-      font-size: 20px;
-      line-height: 1.2;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      margin-bottom: 20px;
-    }
-    .curriculum-card h3 {
-      margin: 0;
-      color: #0a2d5f;
-      font-size: 32px;
-      line-height: 1.16;
-      font-weight: 950;
-      letter-spacing: -0.045em;
-    }
-    .curriculum-card p {
-      margin: 24px 0 0;
-      color: #52667f;
-      font-size: 20px;
-      line-height: 1.7;
-      font-weight: 560;
-      letter-spacing: -0.015em;
-    }
-    .activities-section { margin-top: 46px; }
-    .activities-grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 14px;
-    }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: .04em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 32px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 22px 0 0; color: #52667f; font-size: 19px; line-height: 1.68; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
     .activity-card {
       min-height: 132px;
-      padding: 24px 12px;
+      padding: 24px 16px;
       border-radius: 22px;
       background: #f6faff;
-      border: 1px solid rgba(37,104,184,0.13);
-      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      border: 1px solid rgba(37,104,184,.13);
+      box-shadow: 0 10px 24px rgba(15,55,100,.05);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
     }
-    .activity-icon {
-      font-size: 28px;
-      line-height: 1;
-      margin-bottom: 14px;
-    }
-    .activity-title {
-      color: #0a2d5f;
-      font-size: 18px;
-      line-height: 1.25;
-      font-weight: 900;
-      text-align: center;
-      letter-spacing: -0.02em;
-    }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
     @media print {
-      html, body { background: #ffffff; }
-      .page { box-shadow: none; width: 210mm; min-height: 297mm; padding: 11mm; }
+      body { background: #fff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: none; }
     }
     @media (max-width: 900px) {
-      .page { padding: 34px 28px 46px; }
-      .hero-content { left: 34px; right: 34px; top: 44px; }
+      .page { padding: 30px 22px 44px; }
       .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
-      .activities-grid { grid-template-columns: repeat(4, 1fr); }
     }
     @media (max-width: 760px) {
-      .hero-card { height: 410px; }
-      .school-name-cn { font-size: 33px; max-width: 100%; letter-spacing: -0.06em; }
-      .school-name-en { max-width: 92%; font-size: 20px; }
+      .hero-card { height: 420px; border-radius: 28px; }
+      .hero-content { left: 26px; top: 34px; right: 24px; }
+      .school-name-cn { font-size: 32px; max-width: 100%; letter-spacing: -0.06em; }
+      .school-name-en { max-width: 96%; font-size: 20px; }
       .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
       .location-pill { font-size: 16px; padding: 13px 18px; }
       .intro-card { padding: 26px; }
       .intro-text { font-size: 18px; line-height: 1.75; }
-      .intro-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .activities-grid { grid-template-columns: repeat(2, 1fr); }
       .stat-value { font-size: 24px; }
-      .advantages-grid { grid-template-columns: 1fr; }
-      .campus-gallery { grid-template-columns: repeat(2, 1fr); }
       .campus-card { height: 150px; }
-      .curriculum-grid { grid-template-columns: 1fr; }
-      .activities-grid { grid-template-columns: repeat(2, 1fr); }
-      .section-title-row h2 { font-size: 30px; }
+    }
+    @media (max-width: 560px) {
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: 1fr; }
+      .campus-card { height: 210px; }
     }
   </style>
 </head>
@@ -355,13 +256,14 @@
   <main class="page">
     <div class="report-shell">
       <header class="hero-card">
-        <img class="hero-image" src="https://sunwayschools.edu.my/sites/default/files/node/page/images/2021-11/Contact.JPG" alt="学校校园学习空间">
+        <img class="hero-image" src="https://www.sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Football%20Field_0.jpg" alt="双威国际学校校园图片">
         <div class="hero-overlay"></div>
         <div class="hero-content">
           <h1 class="school-name-cn">双威国际学校吉隆坡校区</h1>
           <div class="school-name-en">Sunway International School · Sunway City Kuala Lumpur</div>
           <div class="curriculum-tags">
-            <span>Ontario Curriculum</span>
+            <span>Canadian Curriculum</span>
+            <span>Cambridge</span>
             <span>IGCSE</span>
             <span>IB DP</span>
           </div>
@@ -369,173 +271,62 @@
         </div>
       </header>
 
-      <section class="intro-section">
-        <div class="section-title-row">
-          <span class="section-title-bar"></span>
-          <h2>学校简介</h2>
-        </div>
-        <div class="intro-card">
-          <p class="intro-text">
-            双威国际学校吉隆坡校区位于雪兰莪双威城，是 Sunway Education Group 旗下的国际学校。学校提供从幼儿园、基础教育到大学预科阶段的学习路径，课程涵盖加拿大安大略课程、剑桥国际课程与 IB Diploma Programme。
-          </p>
-          <div class="intro-stats-grid">
-            <div class="intro-stat-card">
-              <div class="stat-value">2008</div>
-              <div class="stat-label">创校年份</div>
-            </div>
-            <div class="intro-stat-card">
-              <div class="stat-value">4–18</div>
-              <div class="stat-label">覆盖年龄</div>
-            </div>
-            <div class="intro-stat-card">
-              <div class="stat-value">有住宿</div>
-              <div class="stat-label">学校住宿</div>
-            </div>
-            <div class="intro-stat-card">
-              <div class="stat-value">IB World School</div>
-              <div class="stat-label">国际认证</div>
+      <div class="main-content">
+        <section class="intro-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+          <div class="intro-card">
+            <p class="intro-text">双威国际学校吉隆坡校区位于 Sunway City Kuala Lumpur，提供从幼儿园、小学、中学到大学预科阶段的国际课程。学校在加拿大安大略课程、剑桥课程与 IB 文凭课程之间提供清晰升学路径，并迁入可容纳约 3,000 名学生的绿色认证校园。</p>
+            <div class="intro-stats-grid">
+              <div class="intro-stat-card"><div class="stat-value">2008</div><div class="stat-label">创校年份</div></div>
+              <div class="intro-stat-card"><div class="stat-value">4–18</div><div class="stat-label">覆盖年龄</div></div>
+              <div class="intro-stat-card"><div class="stat-value">有住宿</div><div class="stat-label">学校住宿</div></div>
+              <div class="intro-stat-card"><div class="stat-value">IB World School</div><div class="stat-label">国际认证</div></div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="advantages-section">
-        <div class="section-title-row">
-          <span class="section-title-bar"></span>
-          <h2>核心优势</h2>
-        </div>
-        <div class="advantages-grid">
-          <div class="advantage-card">
-            <div class="advantage-icon">🎓</div>
-            <div>
-              <h3>三类国际课程路径</h3>
-              <p>学生可在加拿大安大略课程、剑桥国际课程与 IB Diploma Programme 之间衔接，升学路径选择较灵活。</p>
-            </div>
+        <section class="advantages-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+          <div class="advantages-grid">
+            <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>三套国际课程路径</h3><p>学生可在加拿大安大略课程、剑桥课程与 IB 文凭课程之间衔接，覆盖小学至大学预科阶段。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">🌿</div><div><h3>绿色认证新校园</h3><p>Sunway City Kuala Lumpur 校园为绿色认证校园，规划容量约 3,000 名学生，支持从幼儿园到预科的学习。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">🔬</div><div><h3>实验与科技学习空间</h3><p>校园设有科学实验室、科技学习空间及艺术音乐空间，配合探究式与跨学科项目学习。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">🏊</div><div><h3>完整运动设施</h3><p>校园配置足球场、游泳池、多功能体育馆及多项球类运动空间，支持日常体育课程与校队训练。</p></div></div>
           </div>
-          <div class="advantage-card">
-            <div class="advantage-icon">🌿</div>
-            <div>
-              <h3>绿色认证新校园</h3>
-              <p>吉隆坡校区迁入新建绿色认证校园，校区可容纳从幼儿园到大学预科阶段的学生学习。</p>
-            </div>
-          </div>
-          <div class="advantage-card">
-            <div class="advantage-icon">🏫</div>
-            <div>
-              <h3>双威教育生态连接</h3>
-              <p>学校位于双威城教育生态内，周边包括 Sunway University 与 Sunway College 等教育资源。</p>
-            </div>
-          </div>
-          <div class="advantage-card">
-            <div class="advantage-icon">🏊</div>
-            <div>
-              <h3>多元运动设施</h3>
-              <p>校园可使用足球场、游泳池、健身房、网球场、篮球场、羽毛球场及慢跑道等设施。</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="campus-section">
-        <div class="section-title-row">
-          <span class="section-title-bar"></span>
-          <h2>校园环境</h2>
-        </div>
-        <div class="campus-gallery">
-          <div class="campus-card">
-            <img src="https://sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Football%20Field_0.jpg" alt="校园">
-            <span class="campus-label">校园</span>
+        <section class="campus-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+          <div class="campus-gallery">
+            <div class="campus-card"><img src="https://www.sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Playground.jpg" alt="校园"><span class="campus-label">校园</span></div>
+            <div class="campus-card"><img src="https://www.sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Classroom_0.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+            <div class="campus-card"><img src="https://www.sunwayschools.edu.my/sites/default/files/paragraph/text-with-img/hall2.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+            <div class="campus-card"><img src="https://www.sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Outdoor%20Basketball%20Court_0.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
           </div>
-          <div class="campus-card">
-            <img src="https://sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Classroom_0.jpg" alt="学习空间">
-            <span class="campus-label">学习空间</span>
-          </div>
-          <div class="campus-card">
-            <img src="https://sunwayschools.edu.my/sites/default/files/paragraph/text-with-img/hall2.jpg" alt="体育设施">
-            <span class="campus-label">体育设施</span>
-          </div>
-          <div class="campus-card">
-            <img src="https://sunwayschools.edu.my/sites/default/files/paragraph/gallery/Facilities_Multipurpose%20Hall_0.jpg" alt="运动训练">
-            <span class="campus-label">运动训练</span>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="curriculum-section">
-        <div class="section-title-row">
-          <span class="section-title-bar"></span>
-          <h2>课程体系</h2>
-        </div>
-        <div class="curriculum-grid">
-          <div class="curriculum-card">
-            <div class="curriculum-age">4–5岁</div>
-            <h3>Ontario Kindergarten</h3>
-            <p>幼儿园阶段使用加拿大安大略课程框架，强调早期语言、数理、探究与社会情感发展。</p>
+        <section class="curriculum-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>课程体系</h2></div>
+          <div class="curriculum-grid">
+            <div class="curriculum-card"><div class="curriculum-age">4–6岁</div><h3>Ontario Kindergarten</h3><p>幼儿阶段以加拿大安大略幼儿园课程为基础，重视归属感、自我管理、早期读写、数学思维与探究式学习。</p></div>
+            <div class="curriculum-card"><div class="curriculum-age">6–11岁</div><h3>Primary School</h3><p>小学阶段提供加拿大安大略小学路径，并设有剑桥小学课程，为语言、数学、科学与综合探究打基础。</p></div>
+            <div class="curriculum-card"><div class="curriculum-age">11–14岁</div><h3>Middle School</h3><p>中学低年级衔接加拿大 Grades 6–8 与 Cambridge Lower Secondary，逐步加强学科深度与项目学习能力。</p></div>
+            <div class="curriculum-card"><div class="curriculum-age">14–16岁</div><h3>IGCSE</h3><p>高中阶段可进入 Cambridge Upper Secondary，学生在 Years 10–11 准备 IGCSE，为后续预科课程建立学术基础。</p></div>
+            <div class="curriculum-card"><div class="curriculum-age">16–18岁</div><h3>IB Diploma Programme</h3><p>IB 文凭课程面向大学预科阶段，强调六大学科组、拓展论文、知识理论与创造行动服务的综合学习。</p></div>
           </div>
-          <div class="curriculum-card">
-            <div class="curriculum-age">6–11岁</div>
-            <h3>Ontario Primary</h3>
-            <p>小学阶段覆盖 Grade 1–5，以安大略课程为主线，建立英语、数学、科学与综合探究基础。</p>
-          </div>
-          <div class="curriculum-card">
-            <div class="curriculum-age">12–14岁</div>
-            <h3>Ontario Middle School</h3>
-            <p>中学低年级对应 Grade 6–8，课程逐步提升学科深度，为高中阶段课程选择做准备。</p>
-          </div>
-          <div class="curriculum-card">
-            <div class="curriculum-age">15–17岁</div>
-            <h3>Ontario High School</h3>
-            <p>高中阶段对应 Grade 9–11，学生可获得安大略课程学分，并衔接 Grade 12 或其他大学预科路径。</p>
-          </div>
-          <div class="curriculum-card">
-            <div class="curriculum-age">6–17岁</div>
-            <h3>Cambridge Programme</h3>
-            <p>剑桥课程覆盖小学、Lower Secondary 与 IGCSE 阶段，Year 10–11 可参加 IGCSE 考试。</p>
-          </div>
-          <div class="curriculum-card">
-            <div class="curriculum-age">16–18岁</div>
-            <h3>IB Diploma Programme</h3>
-            <p>IBDP 为两年制大学预科课程，适合希望申请全球大学并接受综合学术训练的学生。</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="activities-section">
-        <div class="section-title-row">
-          <span class="section-title-bar"></span>
-          <h2>课外活动</h2>
-        </div>
-        <div class="activities-grid">
-          <div class="activity-card">
-            <div class="activity-icon">🏅</div>
-            <div class="activity-title">体育与竞技</div>
+        <section class="activities-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>课外活动</h2></div>
+          <div class="activities-grid">
+            <div class="activity-card"><div class="activity-icon">🏅</div><div class="activity-title">体育与竞技</div></div>
+            <div class="activity-card"><div class="activity-icon">🤝</div><div class="activity-title">社区拓展</div></div>
+            <div class="activity-card"><div class="activity-icon">🎤</div><div class="activity-title">学生领导力</div></div>
+            <div class="activity-card"><div class="activity-icon">📚</div><div class="activity-title">社团活动</div></div>
+            <div class="activity-card"><div class="activity-icon">🌏</div><div class="activity-title">课堂外学习</div></div>
           </div>
-          <div class="activity-card">
-            <div class="activity-icon">🧭</div>
-            <div class="activity-title">学生实践项目</div>
-          </div>
-          <div class="activity-card">
-            <div class="activity-icon">💼</div>
-            <div class="activity-title">职业周</div>
-          </div>
-          <div class="activity-card">
-            <div class="activity-icon">🌟</div>
-            <div class="activity-title">学生领导力</div>
-          </div>
-          <div class="activity-card">
-            <div class="activity-icon">🤝</div>
-            <div class="activity-title">社区外展</div>
-          </div>
-          <div class="activity-card">
-            <div class="activity-icon">🎨</div>
-            <div class="activity-title">学生社团</div>
-          </div>
-          <div class="activity-card">
-            <div class="activity-icon">🌏</div>
-            <div class="activity-title">课堂之外</div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
   </main>
 </body>

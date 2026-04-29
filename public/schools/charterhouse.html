@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查特豪斯国际学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #eaf2fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #243f63;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      box-sizing: border-box;
+    }
+    .report-shell, .content-wrap, .main-content {
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+    }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 26px 60px rgba(7, 40, 83, 0.18);
+      background: #0a2d5f;
+    }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.90) 0%, rgba(6, 31, 62, 0.62) 44%, rgba(6, 31, 62, 0.20) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 88%;
+      color: #ffffff;
+      font-size: clamp(34px, 4.2vw, 52px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 72%;
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      color: #ffffff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+    }
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .section-title-bar {
+      width: 8px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+    .section-title-row h2 {
+      margin: 0;
+      color: #082b5f;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 20px 50px rgba(15, 55, 100, 0.08);
+    }
+    .intro-text {
+      margin: 0;
+      color: #243f63;
+      font-size: 24px;
+      line-height: 1.82;
+      font-weight: 560;
+      letter-spacing: -0.025em;
+    }
+    .intro-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 20px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37, 104, 184, 0.14);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value {
+      color: #0f4fa3;
+      font-size: 31px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      word-break: break-word;
+    }
+    .stat-label {
+      margin-top: 12px;
+      color: #667991;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.10);
+      box-shadow: 0 16px 38px rgba(15, 55, 100, 0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #eef5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: 0 0 auto;
+    }
+    .advantage-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+    .advantage-card p {
+      margin: 10px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 560;
+    }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .campus-card {
+      position: relative;
+      height: 170px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #eaf2fb;
+      box-shadow: 0 16px 34px rgba(15, 55, 100, 0.08);
+    }
+    .campus-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .campus-label {
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16, 38, 63, 0.80);
+      color: #ffffff;
+      font-size: 19px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+    }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .curriculum-card {
+      min-height: 245px;
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 18px 42px rgba(15, 55, 100, 0.07);
+    }
+    .curriculum-age {
+      color: #2b70bd;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .curriculum-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 34px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+    .curriculum-card p {
+      margin: 24px 0 0;
+      color: #52667f;
+      font-size: 20px;
+      line-height: 1.7;
+      font-weight: 560;
+      letter-spacing: -0.015em;
+    }
+    .activities-section { margin-top: 46px; }
+    .activities-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+    }
+    .activity-card {
+      min-height: 132px;
+      padding: 24px 16px;
+      border-radius: 22px;
+      background: #f6faff;
+      border: 1px solid rgba(37, 104, 184, 0.13);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .activity-icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .activity-title {
+      color: #0a2d5f;
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+    @media (max-width: 900px) {
+      .page { padding: 28px 22px 44px; }
+      .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+      .advantages-grid { grid-template-columns: 1fr; }
+      .school-name-cn { font-size: 38px; max-width: 96%; }
+      .school-name-en { max-width: 88%; }
+    }
+    @media (max-width: 760px) {
+      .hero-card { height: 380px; border-radius: 26px; }
+      .hero-content { left: 28px; right: 28px; top: 42px; }
+      .school-name-cn { font-size: 31px; letter-spacing: -0.06em; }
+      .school-name-en { font-size: 20px; }
+      .curriculum-tags span { font-size: 16px; padding: 10px 18px; }
+      .location-pill { font-size: 17px; padding: 13px 20px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-value { font-size: 24px; }
+      .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+      .campus-card { height: 150px; }
+      .activities-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .curriculum-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://www.charterhouse-htms.edu.my/wp-content/uploads/2025/12/Campus-design-for-Future-Ready-Learning-1024x682.jpg" alt="查特豪斯国际学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">查特豪斯国际学校</h1>
+          <div class="school-name-en">Charterhouse Malaysia</div>
+          <div class="curriculum-tags">
+            <span>IGCSE Foundation</span>
+            <span>IGCSE</span>
+            <span>A-Level</span>
+          </div>
+          <div class="location-pill">📍 Sri Hartamas · Kuala Lumpur</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>学校简介</h2>
+        </div>
+        <div class="intro-card">
+          <p class="intro-text">查特豪斯国际学校位于吉隆坡 Sri Hartamas，是一所英式国际中学，提供从 IGCSE Foundation、IGCSE 到 A-Level 的升学路径。学校以小班教学、Future Ready 教育框架、设计思维与独立学习项目为核心，面向中学及大学预备阶段学生。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card">
+              <div class="stat-value">2021</div>
+              <div class="stat-label">创校年份</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">13–19</div>
+              <div class="stat-label">覆盖年龄</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">有住宿</div>
+              <div class="stat-label">学校住宿</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">BSO</div>
+              <div class="stat-label">国际认证</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>核心优势</h2>
+        </div>
+        <div class="advantages-grid">
+          <div class="advantage-card">
+            <div class="advantage-icon">🎓</div>
+            <div>
+              <h3>清晰的英国升学路径</h3>
+              <p>课程衔接 IGCSE Foundation、IGCSE 与 A-Level，聚焦中学后段到大学预备阶段的学术准备。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">👥</div>
+            <div>
+              <h3>小班教学设置</h3>
+              <p>IGCSE Foundation 与 IGCSE 班级人数上限为 18 人，A-Level 班级人数上限为 14 人，强调个别关注。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">💡</div>
+            <div>
+              <h3>Future Ready 教育框架</h3>
+              <p>学校将设计思维、独立学习项目与学生主导的 Charterhouse Forum 纳入学习体验。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🏠</div>
+            <div>
+              <h3>寄宿与学习支持</h3>
+              <p>寄宿体系包含学习空间、生活照护与住宿安排，面向需要校园住宿支持的学生。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>校园环境</h2>
+        </div>
+        <div class="campus-gallery">
+          <div class="campus-card">
+            <img src="https://www.charterhouse-htms.edu.my/wp-content/uploads/2021/03/Charterhouse-1-Image-2-1920x1227-1-e1706251358487.jpg" alt="校园">
+            <span class="campus-label">校园</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://www.charterhouse-htms.edu.my/wp-content/uploads/2021/03/Charterhouse-1-Image-4-1920x1227-1-e1706251285119.jpg" alt="学习空间">
+            <span class="campus-label">学习空间</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://www.charterhouse-htms.edu.my/wp-content/uploads/2023/05/boarding_5-960x530.jpg" alt="体育设施">
+            <span class="campus-label">体育设施</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://images.unsplash.com/photo-1526232761682-d26e03ac148e?auto=format&fit=crop&w=1200&q=80" alt="运动训练">
+            <span class="campus-label">运动训练</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="curriculum-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>课程体系</h2>
+        </div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card">
+            <div class="curriculum-age">13–14岁</div>
+            <h3>IGCSE Foundation</h3>
+            <p>九年级阶段的预备课程，为后续 IGCSE 学习建立学科基础、学习方法与独立研究能力。</p>
+          </div>
+          <div class="curriculum-card">
+            <div class="curriculum-age">14–16岁</div>
+            <h3>IGCSE</h3>
+            <p>以国际通行的中学证书课程为核心，强化核心学科理解、批判思维、研究能力与考试准备。</p>
+          </div>
+          <div class="curriculum-card">
+            <div class="curriculum-age">16–19岁</div>
+            <h3>A-Level</h3>
+            <p>大学预备阶段课程，学生围绕目标专业方向进行深度选科，为英国及国际大学申请做准备。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>课外活动</h2>
+        </div>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <div class="activity-icon">💬</div>
+            <div class="activity-title">学生论坛</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🎨</div>
+            <div class="activity-title">创意与表演艺术</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🤝</div>
+            <div class="activity-title">社区合作项目</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🧭</div>
+            <div class="activity-title">升学与职业规划</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🌱</div>
+            <div class="activity-title">可持续发展项目</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

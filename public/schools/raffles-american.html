@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>莱佛士美国学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #eaf2fb; color: #52667f; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif; }
+    body { padding: 28px 0; }
+    .page { width: 960px; max-width: 100%; min-height: 1358px; margin: 0 auto; padding: 42px 42px 56px; background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%); box-shadow: 0 24px 80px rgba(8, 43, 95, 0.14); }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; box-sizing: border-box; }
+    .hero-card { position: relative; width: 100%; max-width: none; height: 360px; border-radius: 34px; overflow: hidden; box-shadow: 0 24px 58px rgba(9, 41, 87, 0.22); background: #d9e8f6; }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6, 31, 62, 0.88) 0%, rgba(6, 31, 62, 0.58) 42%, rgba(6, 31, 62, 0.18) 100%); }
+    .hero-content { position: absolute; left: 48px; top: 54px; right: 48px; bottom: 40px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; z-index: 2; }
+    .school-name-cn { margin: 0; max-width: 92%; color: #ffffff; font-size: clamp(34px, 4vw, 50px); line-height: 1.08; font-weight: 900; letter-spacing: -0.055em; white-space: nowrap; overflow: visible; text-shadow: 0 8px 24px rgba(0, 0, 0, 0.22); }
+    .school-name-en { margin-top: 18px; max-width: 74%; color: rgba(255, 255, 255, 0.94); font-size: 25px; line-height: 1.35; font-weight: 750; letter-spacing: -0.025em; }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span { padding: 12px 26px; border-radius: 999px; background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.36); color: #ffffff; font-size: 19px; font-weight: 850; line-height: 1; backdrop-filter: blur(10px); }
+    .location-pill { margin-top: 26px; padding: 16px 28px; border-radius: 999px; background: rgba(255, 255, 255, 0.95); color: #0f2f5f; font-size: 21px; font-weight: 850; line-height: 1.2; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14); }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card { width: 100%; padding: 34px; border-radius: 30px; background: #ffffff; border: 1px solid rgba(37, 104, 184, 0.12); box-shadow: 0 20px 50px rgba(15, 55, 100, 0.08); }
+    .intro-text { margin: 0; color: #243f63; font-size: 25px; line-height: 1.85; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card { min-height: 106px; padding: 22px 20px; border-radius: 22px; background: #eef5ff; border: 1px solid rgba(37, 104, 184, 0.14); box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05); display: flex; flex-direction: column; justify-content: center; }
+    .stat-value { color: #0f4fa3; font-size: 31px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: keep-all; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section, .campus-section, .curriculum-section, .activities-section { margin-top: 46px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card { padding: 28px 30px; border-radius: 28px; background: #ffffff; border: 1px solid rgba(37, 104, 184, 0.10); box-shadow: 0 16px 38px rgba(15, 55, 100, 0.07); display: flex; gap: 20px; align-items: flex-start; }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15, 55, 100, 0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 20px; bottom: 18px; padding: 11px 20px; border-radius: 999px; background: rgba(16, 38, 63, 0.80); color: #ffffff; font-size: 19px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16); }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .curriculum-card { min-height: 245px; padding: 34px 32px; border-radius: 30px; background: #ffffff; border: 1px solid rgba(37, 104, 184, 0.12); box-shadow: 0 18px 42px rgba(15, 55, 100, 0.07); }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.08em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 34px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 20px; line-height: 1.7; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card { min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37, 104, 184, 0.13); box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 900px) { .page { padding: 30px 24px 44px; } .hero-card { height: 330px; } .hero-content { left: 34px; right: 34px; top: 42px; } .school-name-en { max-width: 86%; font-size: 22px; } .curriculum-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 760px) { body { padding: 0; } .page { width: 100%; min-height: auto; padding: 24px 18px 36px; } .hero-card { height: 430px; border-radius: 28px; } .hero-overlay { background: linear-gradient(180deg, rgba(6, 31, 62, 0.90) 0%, rgba(6, 31, 62, 0.62) 62%, rgba(6, 31, 62, 0.26) 100%); } .hero-content { left: 24px; top: 32px; right: 24px; } .school-name-cn { font-size: clamp(30px, 8vw, 42px); max-width: 100%; } .school-name-en { max-width: 100%; font-size: 20px; } .curriculum-tags span { font-size: 15px; padding: 10px 16px; } .location-pill { font-size: 17px; padding: 13px 18px; } .section-title-row h2 { font-size: 30px; } .intro-card { padding: 26px; } .intro-text { font-size: 18px; line-height: 1.75; } .intro-stats-grid { grid-template-columns: repeat(2, 1fr); } .stat-value { font-size: 24px; } .advantages-grid, .curriculum-grid { grid-template-columns: 1fr; } .campus-gallery { grid-template-columns: repeat(2, 1fr); } .campus-card { height: 150px; } .activities-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media print { body { background: #ffffff; padding: 0; } .page { width: 210mm; min-height: 297mm; box-shadow: none; padding: 10mm; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://old.raffles-american-school.edu.my/wp-content/uploads/2018/05/ras-campus.jpg" alt="莱佛士美国学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">莱佛士美国学校</h1>
+          <div class="school-name-en">Raffles American School · Iskandar Puteri</div>
+          <div class="curriculum-tags">
+            <span>American Curriculum</span>
+            <span>AP</span>
+            <span>IB DP</span>
+          </div>
+          <div class="location-pill">📍 Iskandar Puteri · Johor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>学校简介</h2>
+        </div>
+        <div class="intro-card">
+          <p class="intro-text">莱佛士美国学校位于马来西亚柔佛州依斯干达公主城，提供 Pre-K 至 Grade 12 的美式教育路径。学校采用美国标准衔接课程，并在高中阶段提供 AP 与 IB Diploma Programme 选择，校园同时设有寄宿项目与大型学习、艺术及运动设施。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card">
+              <div class="stat-value">2012</div>
+              <div class="stat-label">创校年份</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">3–18</div>
+              <div class="stat-label">覆盖年龄</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">有住宿</div>
+              <div class="stat-label">学校住宿</div>
+            </div>
+            <div class="intro-stat-card">
+              <div class="stat-value">WASC</div>
+              <div class="stat-label">国际认证</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>核心优势</h2>
+        </div>
+        <div class="advantages-grid">
+          <div class="advantage-card">
+            <div class="advantage-icon">🎓</div>
+            <div>
+              <h3>美式课程直通高中</h3>
+              <p>从幼儿阶段至高中采用美式教育路径，重视语言、人文、数学、科学与综合学习成果的持续衔接。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">📘</div>
+            <div>
+              <h3>AP 与 IB DP 双路径</h3>
+              <p>高中阶段可衔接 Advanced Placement 与 IB Diploma Programme，为不同大学申请方向提供课程选择。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🏫</div>
+            <div>
+              <h3>大型 K–12 校园</h3>
+              <p>校园覆盖学习、实验、图书馆、表演艺术、剧场、宿舍与运动空间，支持学术与校园生活一体化。</p>
+            </div>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🏊</div>
+            <div>
+              <h3>运动设施完整</h3>
+              <p>校园配有室内体育馆、游泳池、网球场、篮球场、足球场与田径跑道，适合重视体育训练的家庭。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>校园环境</h2>
+        </div>
+        <div class="campus-gallery">
+          <div class="campus-card">
+            <img src="https://raffles-american-school.edu.my/wp-content/uploads/2025/01/banner_5-scaled.jpg" alt="校园">
+            <span class="campus-label">校园</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://raffles-american-school.edu.my/wp-content/uploads/2025/01/Library-02-1-1024x683.jpg" alt="学习空间">
+            <span class="campus-label">学习空间</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://raffles-american-school.edu.my/wp-content/uploads/2024/01/swim_web.jpg" alt="体育设施">
+            <span class="campus-label">体育设施</span>
+          </div>
+          <div class="campus-card">
+            <img src="https://raffles-american-school.edu.my/wp-content/uploads/2025/11/CAN_1183-1-scaled.jpg" alt="运动训练">
+            <span class="campus-label">运动训练</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="curriculum-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>课程体系</h2>
+        </div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card">
+            <div class="curriculum-age">3–5岁</div>
+            <h3>Early Childhood</h3>
+            <p>幼儿阶段以探究、语言发展、早期数学、社交情绪与身体发展为基础，帮助孩子适应全英文学习环境。</p>
+          </div>
+          <div class="curriculum-card">
+            <div class="curriculum-age">6–10岁</div>
+            <h3>Elementary School</h3>
+            <p>小学阶段围绕英语语言、数学、科学、社会研究与艺术体育展开，建立阅读、表达与跨学科学习能力。</p>
+          </div>
+          <div class="curriculum-card">
+            <div class="curriculum-age">11–13岁</div>
+            <h3>Middle School</h3>
+            <p>中学阶段加强学科基础与项目学习，帮助学生在科学、人文、数学、语言和创意领域形成更清晰的学习方向。</p>
+          </div>
+          <div class="curriculum-card">
+            <div class="curriculum-age">14–18岁</div>
+            <h3>High School</h3>
+            <p>高中阶段衔接美国高中毕业路径，并提供 AP 与 IB Diploma Programme 选择，支持学生面向海外大学申请规划。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row">
+          <span class="section-title-bar"></span>
+          <h2>课外活动</h2>
+        </div>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <div class="activity-icon">🎾</div>
+            <div class="activity-title">网球学院</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">⛳</div>
+            <div class="activity-title">高尔夫学院</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🎭</div>
+            <div class="activity-title">视觉与表演艺术</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🏅</div>
+            <div class="activity-title">体育活动</div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-icon">🌏</div>
+            <div class="activity-title">探索周活动</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
