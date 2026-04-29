@@ -29,6 +29,7 @@ const ALLOWED_HOSTS = [
   'gardenschool.edu.my',
   'www.gardenschool.edu.my',
   'his.edu.my',
+  'igbis.edu.my',
   'matrixschools.edu.my',
   'miskl.edu.my',
   'old.raffles-american-school.edu.my',

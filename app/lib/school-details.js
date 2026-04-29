@@ -47,6 +47,7 @@ export const SCHOOL_DETAIL_FILES = {
   "Oasis International School": "oasis.html",
   "Tenby International School Setia EcoHill": "tenby-setia.html",
   "Garden International School": "garden-international.html",
+  "IGB International School（IGBIS）": "igb.html",
   "Raffles American School": "raffles-american.html",
   "Nobel International School": "nobel.html",
   "Sayfol International School, SIS": "sayfol.html",
