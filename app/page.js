@@ -729,20 +729,24 @@ export default function Home() {
           })
 
           await new Promise((resolve) => {
-            finalCanvas.toBlob((blob) => {
-              if (!blob) {
-                console.warn(`${g.label} toBlob 失败`)
+            finalCanvas.toBlob(
+              (blob) => {
+                if (!blob) {
+                  console.warn(`${g.label} toBlob 失败`)
+                  resolve()
+                  return
+                }
+                const url = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.download = `选校报告_${g.label}.jpg`
+                link.href = url
+                link.click()
+                setTimeout(() => URL.revokeObjectURL(url), 1000)
                 resolve()
-                return
-              }
-              const url = URL.createObjectURL(blob)
-              const link = document.createElement('a')
-              link.download = `选校报告_${g.label}.png`
-              link.href = url
-              link.click()
-              setTimeout(() => URL.revokeObjectURL(url), 1000)
-              resolve()
-            }, 'image/png')
+              },
+              'image/jpeg',
+              0.92
+            )
           })
 
           // 浏览器对快速连续下载有时会拦,中间稍微停一下
