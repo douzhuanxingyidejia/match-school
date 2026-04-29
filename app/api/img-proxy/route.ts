@@ -30,6 +30,8 @@ const ALLOWED_HOSTS = [
   'www.gardenschool.edu.my',
   'his.edu.my',
   'igbis.edu.my',
+  'cdn.charterhouse-htms.edu.my',
+  'schooladvisor.my',
   'matrixschools.edu.my',
   'miskl.edu.my',
   'old.raffles-american-school.edu.my',
@@ -122,6 +124,26 @@ export async function GET(req: Request) {
       { error: `host not allowed: ${upstream.hostname}` },
       { status: 403 }
     )
+  }
+
+  // 特殊处理：cdn.charterhouse-htms.edu.my 是个变换 CDN，路径里嵌了原始 URL
+  // 形如 /q:l/r:0/wp:0/w:1/u:https://www.charterhouse-htms.edu.my/...
+  // Node fetch 处理这种 URL 会拿到 404（curl 直接拉是 200，原因不明）。
+  // unwrap 出 `u:` 后面的源 URL 直接拉源站。
+  if (upstream.hostname === 'cdn.charterhouse-htms.edu.my') {
+    const decoded = decodeURIComponent(upstream.pathname)
+    const idx = decoded.indexOf('/u:')
+    if (idx >= 0) {
+      const underlying = decoded.slice(idx + 3)
+      try {
+        const next = new URL(underlying)
+        if (ALLOWED_HOSTS.includes(next.hostname)) {
+          upstream = next
+        }
+      } catch {
+        // 不可解析，保持原样让下面 fetch 报错
+      }
+    }
   }
 
   if (upstream.protocol !== 'https:' && upstream.protocol !== 'http:') {
