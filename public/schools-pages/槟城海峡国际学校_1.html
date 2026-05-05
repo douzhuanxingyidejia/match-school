@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>槟城海峡国际学校</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eaf2fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      box-sizing: border-box;
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; box-sizing: border-box; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 24px 58px rgba(15, 55, 100, 0.16);
+      background: #d9e8f8;
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,31,62,0.88) 0%, rgba(6,31,62,0.58) 42%, rgba(6,31,62,0.18) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 96%;
+      color: #ffffff;
+      font-size: clamp(34px, 4.1vw, 50px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 76%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #ffffff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+    .intro-text { margin: 0; color: #243f63; font-size: 25px; line-height: 1.85; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; width: 100%; }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 20px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 31px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: break-word; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 20px; bottom: 18px; padding: 11px 20px; border-radius: 999px; background: rgba(16,38,63,0.80); color: #ffffff; font-size: 19px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .curriculum-card { min-height: 245px; padding: 34px 32px; border-radius: 30px; background: #ffffff; border: 1px solid rgba(37,104,184,0.12); box-shadow: 0 18px 42px rgba(15,55,100,0.07); }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.08em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 34px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 20px; line-height: 1.7; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-section { margin-top: 46px; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card { min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37,104,184,0.13); box-shadow: 0 10px 24px rgba(15,55,100,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 900px) {
+      .page { padding: 34px 28px 46px; }
+      .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+      .advantages-grid { grid-template-columns: 1fr; }
+      .school-name-cn { font-size: clamp(30px, 5vw, 42px); }
+      .school-name-en { max-width: 86%; font-size: 22px; }
+    }
+    @media (max-width: 760px) {
+      .hero-card { height: 330px; border-radius: 28px; }
+      .hero-content { left: 26px; top: 36px; right: 26px; bottom: 30px; }
+      .school-name-cn { max-width: 100%; font-size: 31px; letter-spacing: -0.065em; }
+      .school-name-en { font-size: 18px; max-width: 94%; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
+      .location-pill { font-size: 16px; padding: 13px 18px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-value { font-size: 24px; }
+      .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+      .campus-card { height: 150px; }
+      .activities-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .page { padding: 22px 16px 34px; }
+      .curriculum-grid { grid-template-columns: 1fr; }
+      .campus-gallery { grid-template-columns: 1fr; }
+      .intro-stats-grid { grid-template-columns: 1fr; }
+      .activities-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #ffffff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://www.penangsisgroup.edu.my/MY%20-%20Straits%20Penang/Facilities/11739/image-thumb__11739__w1920/SPG-Building-main-header-1024x683%20%281%29.26ec6220.webp" alt="槟城海峡国际学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">槟城海峡国际学校</h1>
+          <div class="school-name-en">Straits International School Penang</div>
+          <div class="curriculum-tags">
+            <span>British Curriculum</span>
+            <span>Cambridge</span>
+            <span>IGCSE</span>
+          </div>
+          <div class="location-pill">📍 Bayan Lepas · Penang</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">槟城海峡国际学校位于槟城 Bayan Lepas，提供面向 3–16 岁学生的英式国际教育。学校以英格兰国家课程为基础，并在英语、数学与科学学习中融入 Cambridge 课程元素，学生在 Year 11 阶段以 IGCSE 作为重要学术出口。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2012</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–16</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">无住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">Cambridge</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>英式课程路径清晰</h3><p>从 Early Years、Primary 到 Secondary 形成连续学习路径，学生在高年级以 IGCSE 作为主要国际考试方向。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🌐</div><div><h3>ISP 学校网络支持</h3><p>学校隶属 International Schools Partnership，学生可参与跨校交流、项目学习与国际学习机会。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🔬</div><div><h3>学习空间覆盖全面</h3><p>校园设有科学实验室、技术套间、STEM 空间、图书馆、艺术与音乐空间，支持课堂外的探究学习。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏊</div><div><h3>体育与活动资源丰富</h3><p>学校配备运动场地、泳池与多功能空间，并提供超过 130 项课外活动，覆盖体育、艺术与语言类项目。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://www.penangsisgroup.edu.my/MY%20-%20Straits%20Penang/Facilities/11740/image-thumb__11740__w1920/20230418-075212-SIS-ZP5_8246.46905b2d.webp" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://www.penangsisgroup.edu.my/MY%20-%20Straits%20Penang/Photos%20of%20students/Secondary%20School/11789/image-thumb__11789__w1920/20230418-142557-SIS-ZP5_9184.23b2929b.webp" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://www.penangsisgroup.edu.my/MY%20-%20Straits%20Penang/Sports/11876/image-thumb__11876__w1920/20230418-131940-SIS-ZP5_8915.0ed2cf3f.webp" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://www.penangsisgroup.edu.my/MY%20-%20Straits%20Penang/Photos%20of%20students/Primary%20School/11777/image-thumb__11777__w1920/20230418-115336-SIS-ZP5_8773-Edit.3e9d5a41.webp" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+          </div>
+  </main>
+</body>
+</html>

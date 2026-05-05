@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beaconhouse国际学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #eaf3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #243f63;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #d8e8f8;
+      box-shadow: 0 24px 58px rgba(10, 45, 95, 0.18);
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,31,62,0.90) 0%, rgba(6,31,62,0.62) 43%, rgba(6,31,62,0.16) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 92%;
+      color: #ffffff;
+      font-size: clamp(32px, 4vw, 50px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 74%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar {
+      width: 8px; height: 42px; border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card, .advantage-card, .curriculum-card {
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+    .intro-card { width: 100%; padding: 34px; border-radius: 30px; }
+    .intro-text { margin: 0; color: #243f63; font-size: 24px; line-height: 1.78; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card {
+      min-height: 106px; padding: 22px 18px; border-radius: 22px;
+      background: #eef5ff; border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 30px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: keep-all; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section, .campus-section, .curriculum-section, .activities-section { margin-top: 46px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+    .advantage-card { padding: 28px 30px; border-radius: 28px; display: flex; gap: 20px; align-items: flex-start; }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 16px; bottom: 16px; padding: 11px 18px; border-radius: 999px; background: rgba(16,38,63,0.80); color: #fff; font-size: 18px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+    .curriculum-card { min-height: 242px; padding: 32px 30px; border-radius: 30px; }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.04em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 33px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 22px 0 0; color: #52667f; font-size: 19px; line-height: 1.66; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5,1fr); gap: 18px; }
+    .activity-card { min-height: 132px; padding: 24px 14px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37,104,184,0.13); box-shadow: 0 10px 24px rgba(15,55,100,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media print {
+      body { background: #fff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: none; }
+      .hero-card { height: 92mm; }
+      .campus-card { height: 42mm; }
+    }
+    @media (max-width: 760px) {
+      .page { padding: 28px 22px 42px; }
+      .hero-card { height: 420px; border-radius: 28px; }
+      .hero-content { left: 28px; right: 28px; top: 38px; bottom: 32px; }
+      .school-name-cn { font-size: 34px; max-width: 100%; }
+      .school-name-en { max-width: 95%; font-size: 20px; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 15px; }
+      .location-pill { font-size: 16px; padding: 13px 18px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: repeat(2,1fr); }
+      .stat-value { font-size: 24px; }
+      .campus-card { height: 150px; }
+    }
+    @media (max-width: 560px) {
+      .intro-stats-grid, .advantages-grid, .campus-gallery, .curriculum-grid, .activities-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://beaconhousesriinai.edu.my/wp-content/uploads/2023/03/Running-Track.jpg" alt="Beaconhouse校园环境">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">Beaconhouse国际学校</h1>
+          <div class="school-name-en">Beaconhouse Sri Inai International School</div>
+          <div class="curriculum-tags">
+            <span>EYFS</span>
+            <span>Cambridge Primary</span>
+            <span>IGCSE</span>
+          </div>
+          <div class="location-pill">📍 Petaling Jaya · Selangor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">Beaconhouse Sri Inai International School 位于雪兰莪州 Petaling Jaya，是 Beaconhouse Malaysia 国际教育路径中的主要校区。学校提供从 Reception 到小学、初中及 IGCSE 阶段的课程，并以 Cambridge 课程体系、学科基础与课外拓展相结合。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">待确认</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">4–16</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">无住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">Cambridge</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>Reception 至 IGCSE 路径</h3><p>课程覆盖早期、Primary、Secondary 与 IGCSE 阶段，学习路径清晰，便于家庭规划升学节奏。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">📘</div><div><h3>Cambridge 学术框架</h3><p>小学至 IGCSE 采用 Cambridge International Curriculum，强调英语、数学、科学与多学科基础。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏊</div><div><h3>体育设施配置明确</h3><p>校园设有游泳池、跑道、篮球场、五人足球场与多功能场地，体育训练资源较完整。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🎭</div><div><h3>课外拓展分类清晰</h3><p>课外项目分为体育、艺术、生活技能和学术四类，覆盖运动队、艺术创作、辩论与学科支持。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://beaconhousesriinai.edu.my/wp-content/uploads/2023/10/IMG_1921-scaled.jpg" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://beaconhousesriinai.edu.my/wp-content/uploads/2023/03/Library_2.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://beaconhousesriinai.edu.my/wp-content/uploads/2023/03/Swimming-Pool.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://beaconhousesriinai.edu.my/wp-content/uploads/2023/02/Copy-of-CAM01992.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+          </div>
+  </main>
+</body>
+</html>

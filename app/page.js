@@ -7,6 +7,8 @@ import {
   curriculumLabelFor,
   curriculumIntroUrlFor,
 } from './lib/curricula'
+import { curriculumPageUrlsFor } from './lib/curricula-pages'
+import { schoolPageUrlsFor } from './lib/school-pages'
 
 const DEFAULT_MYR_TO_CNY = 1.55
 
@@ -502,13 +504,18 @@ export default function Home() {
         ? `${form.dob_year}年${Number(form.dob_month)}月${Number(form.dob_day)}日`
         : '—'
 
-    const handleExportLongImage = async () => {
+    // ── Page 3: 导出 PDF（按体系一份）──
+    // 输出：每个体系一份 PDF，顺序为：
+    //   1) 学校汇总（1 页，仅列该体系下选中的学校）
+    //   2) 体系介绍（N 页，每张 HTML = 1 整页）
+    //   3) 该体系下每所学校的详情（M 页/校，每张 HTML = 1 整页）
+    // 数据源：app/lib/curricula-pages.js  /  app/lib/school-pages.js
+    const handleExportPDF = async () => {
       if (schoolList.length === 0) {
         alert('请先选择至少一所学校')
         return
       }
 
-      // 按 CURRICULUM_ORDER 分组,跳过空组
       const groups = CURRICULUM_ORDER.map((cur) => ({
         cur,
         label: curriculumLabelFor(cur),
@@ -520,12 +527,16 @@ export default function Home() {
         return
       }
 
-      setExportingState({ active: true, label: '准备…' })
+      setExportingState({ active: true, label: '准备 PDF…' })
       try {
-        const { default: html2canvas } = await import('html2canvas')
+        const [{ default: html2canvas }, jspdfMod] = await Promise.all([
+          import('html2canvas'),
+          import('jspdf'),
+        ])
+        const { jsPDF } = jspdfMod
         const opts = { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false }
 
-        // 把外链 <img> 通过代理拉成字节，再转成 data: URI 塞回 src
+        // -- 工具：外链 img -> /api/img-proxy -> dataURI
         const blobToDataUri = (blob) =>
           new Promise((resolve, reject) => {
             const reader = new FileReader()
@@ -572,8 +583,124 @@ export default function Home() {
           )
         }
 
-        // 构造一份"屏幕外的"页头 DOM：学生信息 + 5 列表（仅本体系）
-        const buildHiddenHeaderEl = (label, groupSchools) => {
+        // -- 工具：把一个远端 HTML 加载到屏外 iframe → 截成单张 canvas
+        const loadIframeAndCapture = async (url) => {
+          const iframe = document.createElement('iframe')
+          iframe.src = url
+          iframe.style.cssText =
+            'position:fixed;left:-99999px;top:0;width:1100px;height:1600px;border:0;background:#fff;'
+          document.body.appendChild(iframe)
+          try {
+            await new Promise((resolve, reject) => {
+              iframe.onload = resolve
+              iframe.onerror = () => reject(new Error('iframe load failed: ' + url))
+            })
+            const doc = iframe.contentDocument
+            if (!doc?.body) throw new Error('iframe doc 空: ' + url)
+            await rewriteImagesToProxy(doc)
+            // 等图片完全 decode + 字体就绪
+            try { await doc.fonts?.ready } catch {}
+            await new Promise((r) => setTimeout(r, 120))
+            const target = doc.documentElement
+            const widthCss = Math.max(960, doc.body.scrollWidth, target.scrollWidth)
+            const heightCss = Math.max(doc.body.scrollHeight, target.scrollHeight)
+            return await html2canvas(target, {
+              ...opts,
+              width: widthCss,
+              height: heightCss,
+              windowWidth: widthCss,
+              windowHeight: heightCss,
+            })
+          } finally {
+            iframe.remove()
+          }
+        }
+
+        // -- 工具：加载 logo 用作 PDF 水印
+        // 关键决策：用 JPEG 而不是透明 PNG。
+        //   原因：jsPDF 嵌入带 alpha 的 PNG 会拆出 RGB 流 + alpha soft mask 两份
+        //         未压缩位图,每页可达 ~10MB,N 页 PDF 会暴涨。
+        //   方案：保留 logo 白底,缩到 600px 宽,JPEG 0.75 质量 → ~15KB。
+        //         在 PDF 上以 8% 透明度叠加,白底叠在浅蓝页面上几乎不可见,
+        //         蓝/红 logo 元素表现为淡淡水印,效果与透明 PNG 接近,体积小 1000 倍。
+        const loadLogoForWatermark = async () => {
+          try {
+            const img = new Image()
+            img.crossOrigin = 'anonymous'
+            await new Promise((resolve, reject) => {
+              img.onload = resolve
+              img.onerror = () => reject(new Error('logo 加载失败'))
+              img.src = '/logo.png'
+            })
+            const srcW = img.naturalWidth || img.width
+            const srcH = img.naturalHeight || img.height
+            const MAX_W = 1000 // 水印分辨率（占 2/3 页宽时,1000px 源图够清晰）
+            const scale = Math.min(1, MAX_W / srcW)
+            const w = Math.round(srcW * scale)
+            const h = Math.round(srcH * scale)
+            const cv = document.createElement('canvas')
+            cv.width = w
+            cv.height = h
+            const ctx = cv.getContext('2d')
+            ctx.imageSmoothingEnabled = true
+            ctx.imageSmoothingQuality = 'high'
+            // 先填白底（确保 JPEG 输出是纯白底,叠 8% 透明度后基本不可见）
+            ctx.fillStyle = '#ffffff'
+            ctx.fillRect(0, 0, w, h)
+            ctx.drawImage(img, 0, 0, w, h)
+            // 输出 JPEG（无 alpha,体积小;0.75 质量对 logo 这种简单图够用）
+            return { dataUri: cv.toDataURL('image/jpeg', 0.75), w, h }
+          } catch (e) {
+            console.warn('logo 水印不可用:', e)
+            return null
+          }
+        }
+
+        // -- 工具：在 PDF 当前页中央叠加一份低透明度 logo 水印
+        // 关键优化：传同一个 alias='wm-logo' → jsPDF 跨页复用同一份图像流(JPEG 复用很可靠)
+        const stampLogo = (pdf, logo, pageW, pageH) => {
+          if (!logo) return
+          try {
+            const logoW = pageW * (2 / 3) // 占页宽 2/3
+            const logoH = logoW * (logo.h / logo.w)
+            const x = (pageW - logoW) / 2
+            const y = (pageH - logoH) / 2
+            const gOn = pdf.GState({ opacity: 0.08 }) // 8% 透明度,白底基本不可见,品牌色变成淡水印
+            pdf.setGState(gOn)
+            pdf.addImage(logo.dataUri, 'JPEG', x, y, logoW, logoH, 'wm-logo', 'MEDIUM')
+            const gOff = pdf.GState({ opacity: 1 })
+            pdf.setGState(gOff)
+          } catch (e) {
+            console.warn('叠加 logo 水印失败:', e)
+          }
+        }
+
+        // -- 工具：一组 canvas → 一份多页 PDF（每页尺寸跟随该 canvas 尺寸,单位 pt;每页加水印）
+        const canvasesToPdf = (canvases, filename, logo) => {
+          if (canvases.length === 0) return
+          const first = canvases[0]
+          const pdf = new jsPDF({
+            unit: 'pt',
+            format: [first.width, first.height],
+            orientation: first.width > first.height ? 'l' : 'p',
+          })
+          pdf.addImage(first.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, first.width, first.height)
+          stampLogo(pdf, logo, first.width, first.height)
+          for (let i = 1; i < canvases.length; i++) {
+            const c = canvases[i]
+            pdf.addPage([c.width, c.height], c.width > c.height ? 'l' : 'p')
+            pdf.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, c.width, c.height)
+            stampLogo(pdf, logo, c.width, c.height)
+          }
+          pdf.save(filename)
+        }
+
+        // 预加载 logo（一次,所有 PDF 复用）
+        setExportingState({ active: true, label: '加载水印…' })
+        const logoData = await loadLogoForWatermark()
+
+        // -- 工具：构造"学校汇总"屏外 DOM（学生信息 2 列 + 5 列学校表，仅当前体系）
+        const buildSummaryElForGroup = (g) => {
           const studentRowsHtml = [
             ['学生姓名', studentInfo.name],
             ['学生性别', studentInfo.gender],
@@ -591,10 +718,10 @@ export default function Home() {
             )
             .join('')
 
-          const tableRowsHtml = groupSchools
+          const tableRowsHtml = g.schools
             .map((s, i) => {
               const t = formatTuition(s.tuition_amount)
-              const isLast = i === groupSchools.length - 1
+              const isLast = i === g.schools.length - 1
               const border = isLast ? 'none' : '1px solid rgba(37,104,184,.06)'
               return `
                 <tr style="border-bottom:${border}">
@@ -611,13 +738,13 @@ export default function Home() {
           wrapper.style.cssText =
             'position:fixed;left:-9999px;top:0;width:1100px;padding:32px 28px 24px;background:linear-gradient(180deg,#f7fbff 0%,#edf5ff 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;color:#243f63;'
           wrapper.innerHTML = `
-            <h1 style="font-size:30px;font-weight:900;color:#082b5f;margin:0 0 24px;letter-spacing:-0.025em">选校报告 · 《${esc(label)}》体系</h1>
+            <h1 style="font-size:30px;font-weight:900;color:#082b5f;margin:0 0 24px;letter-spacing:-0.025em">选校报告 · 《${esc(g.label)}》体系</h1>
 
             <div style="background:#fff;border:1px solid rgba(37,104,184,.12);border-radius:24px;box-shadow:0 20px 50px rgba(15,55,100,.08);margin-bottom:20px;overflow:hidden">
               <div style="padding:14px 22px;border-bottom:1px solid rgba(37,104,184,.08)">
                 <h2 style="margin:0;font-size:17px;font-weight:800;color:#082b5f">学生信息</h2>
               </div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px 32px;padding:20px 22px;font-size:16px">
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px 36px;padding:20px 22px;font-size:16px">
                 ${studentRowsHtml}
               </div>
             </div>
@@ -641,120 +768,65 @@ export default function Home() {
           return wrapper
         }
 
-        let imageIdx = 0
+        // 每个体系合并成一份 PDF：[汇总(1页)] + [体系介绍(N页)] + [本体系每所学校(M页/校)]
+        let groupIdx = 0
         for (const g of groups) {
-          imageIdx++
-          const tag = `${g.label} (${imageIdx}/${groups.length})`
+          groupIdx++
+          const tag = `${g.label} (${groupIdx}/${groups.length})`
+          const cans = []
 
-          // 1) 抓取本体系下的 iframe
-          const introIframe = document.querySelector(
-            `section[data-curriculum-group="${g.cur}"] iframe.curriculum-intro-frame`
-          )
-          const schoolIframes = Array.from(
-            document.querySelectorAll(
-              `section[data-curriculum-group="${g.cur}"] iframe.school-detail-frame`
-            )
-          )
-
-          // 2) 并行预热图片代理
-          setExportingState({ active: true, label: `${tag} - 加载图片…` })
-          const allFrames = [introIframe, ...schoolIframes].filter(Boolean)
-          await Promise.all(
-            allFrames.map(async (f) => {
-              try {
-                const doc = f.contentDocument
-                if (doc?.body) await rewriteImagesToProxy(doc)
-              } catch (e) {
-                console.warn('图片代理预热失败:', e)
-              }
-            })
-          )
-
-          // 3) 截图：header → 体系介绍 → 各学校
-          setExportingState({ active: true, label: `${tag} - 截取页头…` })
-          const headerEl = buildHiddenHeaderEl(g.label, g.schools)
-          document.body.appendChild(headerEl)
-          const canvases = []
+          // 1) 学校汇总（1 页）
+          setExportingState({ active: true, label: `${tag} - 生成汇总…` })
+          const summaryEl = buildSummaryElForGroup(g)
+          document.body.appendChild(summaryEl)
           try {
-            canvases.push(await html2canvas(headerEl, opts))
-          } catch (e) {
-            console.warn('截 header 失败:', e)
+            cans.push(await html2canvas(summaryEl, opts))
+          } finally {
+            summaryEl.remove()
           }
-          headerEl.remove()
 
-          if (introIframe?.contentDocument?.body) {
-            setExportingState({ active: true, label: `${tag} - 截取体系介绍…` })
-            try {
-              canvases.push(await html2canvas(introIframe.contentDocument.body, opts))
-            } catch (e) {
-              console.warn('截介绍失败:', e)
+          // 2) 体系介绍（N 页）
+          const curUrls = curriculumPageUrlsFor(g.cur)
+          if (curUrls.length === 0) {
+            console.warn(`[PDF] 体系 ${g.label} 未配置多页 HTML，跳过该段`)
+          } else {
+            for (let pi = 0; pi < curUrls.length; pi++) {
+              setExportingState({ active: true, label: `${tag} - 体系介绍 ${pi + 1}/${curUrls.length}…` })
+              cans.push(await loadIframeAndCapture(curUrls[pi]))
             }
           }
 
-          for (let si = 0; si < schoolIframes.length; si++) {
-            setExportingState({
-              active: true,
-              label: `${tag} - 截取学校 ${si + 1}/${schoolIframes.length}…`,
-            })
-            const doc = schoolIframes[si].contentDocument
-            if (!doc?.body) continue
-            try {
-              canvases.push(await html2canvas(doc.body, opts))
-            } catch (e) {
-              console.warn('截学校失败:', e)
+          // 3) 本体系下每所学校的详情（M 页/校）
+          for (let si = 0; si < g.schools.length; si++) {
+            const s = g.schools[si]
+            const sUrls = schoolPageUrlsFor(s.school_name_en)
+            const cnName = s.school_name_cn || s.school_name_en
+            if (sUrls.length === 0) {
+              console.warn(`[PDF] 学校 ${cnName} 未配置多页 HTML，跳过`)
+              continue
+            }
+            for (let pi = 0; pi < sUrls.length; pi++) {
+              setExportingState({
+                active: true,
+                label: `${tag} - ${cnName} ${pi + 1}/${sUrls.length}…`,
+              })
+              cans.push(await loadIframeAndCapture(sUrls[pi]))
             }
           }
 
-          if (canvases.length === 0) {
-            console.warn(`${g.label} 没有任何画布,跳过`)
+          if (cans.length === 0) {
+            console.warn(`[PDF] 体系 ${g.label} 没有任何可输出的内容，跳过整份 PDF`)
             continue
           }
 
-          // 4) 拼接 + 下载
-          setExportingState({ active: true, label: `${tag} - 拼接下载…` })
-          const targetWidth = Math.max(...canvases.map((c) => c.width))
-          const scaledHeights = canvases.map((c) => Math.round((c.height * targetWidth) / c.width))
-          const totalHeight = scaledHeights.reduce((s, h) => s + h, 0)
-
-          const finalCanvas = document.createElement('canvas')
-          finalCanvas.width = targetWidth
-          finalCanvas.height = totalHeight
-          const ctx = finalCanvas.getContext('2d')
-          ctx.fillStyle = '#ffffff'
-          ctx.fillRect(0, 0, targetWidth, totalHeight)
-          let y = 0
-          canvases.forEach((c, i) => {
-            ctx.drawImage(c, 0, y, targetWidth, scaledHeights[i])
-            y += scaledHeights[i]
-          })
-
-          await new Promise((resolve) => {
-            finalCanvas.toBlob(
-              (blob) => {
-                if (!blob) {
-                  console.warn(`${g.label} toBlob 失败`)
-                  resolve()
-                  return
-                }
-                const url = URL.createObjectURL(blob)
-                const link = document.createElement('a')
-                link.download = `选校报告_${g.label}.jpg`
-                link.href = url
-                link.click()
-                setTimeout(() => URL.revokeObjectURL(url), 1000)
-                resolve()
-              },
-              'image/jpeg',
-              0.92
-            )
-          })
-
-          // 浏览器对快速连续下载有时会拦,中间稍微停一下
-          await new Promise((r) => setTimeout(r, 400))
+          // 合并落盘
+          setExportingState({ active: true, label: `${tag} - 合并下载…` })
+          canvasesToPdf(cans, `选校报告_《${g.label}》体系.pdf`, logoData)
+          await new Promise((r) => setTimeout(r, 350))
         }
       } catch (err) {
-        console.error('导出长图失败:', err)
-        alert('导出失败：' + (err?.message || err))
+        console.error('导出 PDF 失败:', err)
+        alert('导出 PDF 失败：' + (err?.message || err))
       } finally {
         setExportingState({ active: false, label: '' })
       }
@@ -1128,17 +1200,11 @@ export default function Home() {
               </button>
               <div className="flex gap-2">
                 <button
-                  onClick={() => window.print()}
-                  className="rounded-md border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
-                >
-                  🖨 打印
-                </button>
-                <button
-                  onClick={handleExportLongImage}
+                  onClick={handleExportPDF}
                   disabled={exportingState.active || sharingState.active}
-                  className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 min-w-[180px]"
+                  className="rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 min-w-[180px]"
                 >
-                  {exportingState.active ? `⏳ ${exportingState.label}` : '📷 导出长图'}
+                  {exportingState.active ? `⏳ ${exportingState.label}` : '📄 导出 PDF'}
                 </button>
                 <button
                   onClick={handleShareReport}

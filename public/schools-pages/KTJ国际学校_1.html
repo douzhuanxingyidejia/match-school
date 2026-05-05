@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KTJ国际学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #edf4fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #243f63;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #edf4fb 100%);
+      box-sizing: border-box;
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; box-sizing: border-box; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 24px 58px rgba(8, 43, 95, 0.18);
+      background: #dceaf7;
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,31,62,0.90) 0%, rgba(6,31,62,0.62) 42%, rgba(6,31,62,0.16) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 92%;
+      color: #fff;
+      font-size: clamp(34px, 4.2vw, 52px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 76%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.96);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card, .advantage-card, .curriculum-card, .activity-card {
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+    .intro-card { padding: 34px; border-radius: 30px; background: #ffffff; box-shadow: 0 20px 50px rgba(15,55,100,0.08); width: 100%; }
+    .intro-text { margin: 0; color: #243f63; font-size: 24px; line-height: 1.82; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; width: 100%; }
+    .intro-stat-card { min-height: 106px; padding: 22px 18px; border-radius: 22px; background: #eef5ff; border: 1px solid rgba(37,104,184,0.14); box-shadow: 0 10px 24px rgba(15,55,100,0.05); display: flex; flex-direction: column; justify-content: center; }
+    .stat-value { color: #0f4fa3; font-size: 29px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: keep-all; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section, .campus-section, .curriculum-section, .activities-section { margin-top: 42px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card { padding: 28px 30px; border-radius: 28px; background: #ffffff; display: flex; gap: 20px; align-items: flex-start; }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; width: 100%; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label { position: absolute; left: 16px; bottom: 16px; padding: 11px 18px; border-radius: 999px; background: rgba(16,38,63,0.82); color: #fff; font-size: 19px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,0.16); }
+    .curriculum-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; }
+    .curriculum-card { min-height: 245px; padding: 32px 30px; border-radius: 30px; background: #ffffff; }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.05em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 32px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 22px 0 0; color: #52667f; font-size: 19px; line-height: 1.68; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; width: 100%; }
+    .activity-card { min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media print {
+      body { background: #ffffff; }
+      .page { width: 210mm; min-height: 297mm; padding: 12mm; box-shadow: none; }
+    }
+    @media (max-width: 900px) {
+      .page { padding: 28px 22px 44px; }
+      .hero-card { height: 340px; }
+      .hero-content { left: 30px; top: 40px; right: 30px; }
+      .school-name-en { max-width: 90%; font-size: 22px; }
+      .intro-stats-grid, .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+      .advantages-grid, .curriculum-grid { grid-template-columns: 1fr; }
+      .activities-grid { grid-template-columns: repeat(2, 1fr); }
+      .campus-card { height: 160px; }
+    }
+    @media (max-width: 560px) {
+      .school-name-cn { font-size: 34px; letter-spacing: -0.06em; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
+      .location-pill { font-size: 16px; padding: 13px 18px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .stat-value { font-size: 24px; }
+      .section-title-row h2 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://www.ktj.edu.my/userfiles/ktjmvc/imagery/body-images/01-about/01-about-facilities-arc.jpg" alt="KTJ校园建筑">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">KTJ国际学校</h1>
+          <div class="school-name-en">Kolej Tuanku Ja'afar · Mantin</div>
+          <div class="curriculum-tags">
+            <span>IEYC</span>
+            <span>IPC</span>
+            <span>IGCSE</span>
+            <span>A-Level</span>
+          </div>
+          <div class="location-pill">📍 Mantin · Negeri Sembilan</div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="intro-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+          <div class="intro-card">
+            <p class="intro-text">Kolej Tuanku Ja'afar（KTJ）位于马来西亚森美兰州 Mantin，是一所英式走读与寄宿制国际学校。学校覆盖早年、小学、中学和 Sixth Form 阶段，课程路径从 IEYC、IPC 与英国国家课程延伸至 IGCSE 和 A Level，并以校园住宿、学术支持和课外活动体系作为学生成长的重要组成部分。</p>
+            <div class="intro-stats-grid">
+              <div class="intro-stat-card"><div class="stat-value">1989</div><div class="stat-label">创校年份</div></div>
+              <div class="intro-stat-card"><div class="stat-value">3–19</div><div class="stat-label">覆盖年龄</div></div>
+              <div class="intro-stat-card"><div class="stat-value">有住宿</div><div class="stat-label">学校住宿</div></div>
+              <div class="intro-stat-card"><div class="stat-value">CIS</div><div class="stat-label">国际认证</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="advantages-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+          <div class="advantages-grid">
+            <div class="advantage-card"><div class="advantage-icon">🏫</div><div><h3>英式寄宿学校体系</h3><p>中学阶段设有寄宿生活与 House 支持体系，寄宿安排贯穿学习、晚自习、周末活动与生活技能培养。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">📘</div><div><h3>清晰升学课程路径</h3><p>小学阶段结合 IPC 与英国课程，中学衔接 IGCSE，Sixth Form 以 A Level 作为大学申请主路径。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>大学准备支持</h3><p>Sixth Form 提供 A Level 学科选择、EPQ、IELTS、SAT 与大学申请相关拓展项目。</p></div></div>
+            <div class="advantage-card"><div class="advantage-icon">🌿</div><div><h3>大型综合校园</h3><p>校园包含学习空间、图书馆、体育场地、泳池、艺术与设计空间，支持学术、体育和创意发展。</p></div></div>
+          </div>
+        </section>
+
+        <section class="campus-section">
+          <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+          <div class="campus-gallery">
+            <div class="campus-card"><img src="https://www.ktj.edu.my/userfiles/ktjmvc/imagery/body-images/01-about/01-about-facilities-auditorium.jpg" alt="校园"><span class="campus-label">校园</span></div>
+            <div class="campus-card"><img src="https://www.ktj.edu.my/userfiles/ktjmvc/imagery/body-images/04-senior/body-secondarycurriculum.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+            <div class="campus-card"><img src="https://www.ktj.edu.my/userfiles/ktjmvc/imagery/body-images/01-about/01-about-facilities-pool.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+            <div class="campus-card"><img src="https://www.ktj.edu.my/userfiles/ktjmvc/imagery/body-images/04-senior/body-secondarycurriculum%281%29.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+          </div>
+        </section>
+
+                </main>
+    </div>
+  </div>
+</body>
+</html>

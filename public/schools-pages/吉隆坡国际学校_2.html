@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>吉隆坡国际学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #edf5ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 24px 56px rgba(9, 44, 86, 0.18);
+      background: #d8e8f6;
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.90) 0%, rgba(6, 31, 62, 0.62) 44%, rgba(6, 31, 62, 0.15) 100%);
+    }
+    .hero-content {
+      position: absolute; left: 48px; top: 54px; right: 48px; bottom: 40px;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0; max-width: 96%; color: #fff; font-size: clamp(40px, 4.6vw, 54px); line-height: 1.08;
+      font-weight: 900; letter-spacing: -0.055em; white-space: nowrap; overflow: visible;
+      text-shadow: 0 8px 24px rgba(0,0,0,.22);
+    }
+    .school-name-en {
+      margin-top: 18px; max-width: 76%; color: rgba(255,255,255,.94); font-size: 25px; line-height: 1.35;
+      font-weight: 780; letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 24px; border-radius: 999px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.38);
+      color: #fff; font-size: 19px; font-weight: 850; line-height: 1; backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px; padding: 16px 28px; border-radius: 999px; background: rgba(255,255,255,.95); color: #0f2f5f;
+      font-size: 21px; font-weight: 850; line-height: 1.2; box-shadow: 0 12px 28px rgba(0,0,0,.14);
+    }
+    section { width: 100%; }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%; padding: 34px; border-radius: 30px; background: #fff; border: 1px solid rgba(37, 104, 184, .12);
+      box-shadow: 0 20px 50px rgba(15,55,100,.08);
+    }
+    .intro-text { margin: 0; color: #243f63; font-size: 25px; line-height: 1.78; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card {
+      min-height: 106px; padding: 22px 18px; border-radius: 22px; background: #eef5ff; border: 1px solid rgba(37,104,184,.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,.05); display: flex; flex-direction: column; justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 31px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: break-word; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section { margin-top: 42px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    .advantage-card {
+      padding: 28px 30px; border-radius: 28px; background: #fff; border: 1px solid rgba(37,104,184,.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,.07); display: flex; gap: 20px; align-items: flex-start;
+    }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label {
+      position: absolute; left: 18px; bottom: 18px; padding: 11px 18px; border-radius: 999px; background: rgba(16,38,63,.80);
+      color: #fff; font-size: 19px; line-height: 1; font-weight: 900; letter-spacing: -0.02em; backdrop-filter: blur(8px); box-shadow: 0 8px 18px rgba(0,0,0,.16);
+    }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .curriculum-card {
+      min-height: 245px; padding: 34px 30px; border-radius: 30px; background: #fff; border: 1px solid rgba(37,104,184,.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,.07);
+    }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: .04em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 32px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 19px; line-height: 1.68; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-section { margin-top: 46px; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card {
+      min-height: 132px; padding: 24px 16px; border-radius: 22px; background: #f6faff; border: 1px solid rgba(37,104,184,.13);
+      box-shadow: 0 10px 24px rgba(15,55,100,.05); display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 900px) {
+      .page { padding: 28px 22px 42px; }
+      .hero-card { height: 340px; }
+      .hero-content { left: 30px; top: 40px; right: 30px; }
+      .school-name-en { max-width: 88%; }
+      .intro-stats-grid, .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+      .curriculum-grid, .advantages-grid { grid-template-columns: 1fr; }
+      .activities-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .school-name-cn { font-size: 34px; letter-spacing: -0.065em; }
+      .school-name-en { font-size: 20px; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
+      .location-pill { font-size: 17px; padding: 13px 18px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .stat-value { font-size: 24px; }
+      .campus-card { height: 150px; }
+    }
+    @media print {
+      body { background: #fff; }
+      .page { width: 210mm; min-height: 297mm; padding: 10mm; background: #f7fbff; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+<section class="curriculum-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课程体系</h2></div>
+        <div class="curriculum-grid">
+          <div class="curriculum-card"><div class="curriculum-age">3–11岁</div><h3>Elementary School</h3><p>从 Prep Reception 起培养基础能力，以探究式学习建立读写、数学、科学、艺术、音乐与体育等核心学习习惯。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">11–14岁</div><h3>Middle School</h3><p>中学阶段强调学生自主性，并通过 Wheel 选修课程接触设计思维、健康、戏剧等更广泛学习领域。</p></div>
+          <div class="curriculum-card"><div class="curriculum-age">14–18岁</div><h3>High School</h3><p>高中提供 ISKL Diploma、IB Diploma 与 Pursuits Program，学生可结合 AP、IB 与多元课程形成个性化升学路径。</p></div>
+        </div>
+      </section>
+
+      <section class="activities-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>课外活动</h2></div>
+        <div class="activities-grid">
+          <div class="activity-card"><div class="activity-icon">🏅</div><div class="activity-title">体育</div></div>
+          <div class="activity-card"><div class="activity-icon">🎭</div><div class="activity-title">表演艺术</div></div>
+          <div class="activity-card"><div class="activity-icon">🎵</div><div class="activity-title">音乐</div></div>
+          <div class="activity-card"><div class="activity-icon">🌐</div><div class="activity-title">模拟联合国</div></div>
+          <div class="activity-card"><div class="activity-icon">🤝</div><div class="activity-title">社区服务</div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

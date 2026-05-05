@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>马来西亚澳洲课程体系全线介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #eaf2fb;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #243f63;
+    }
+
+    body { padding: 36px 18px; }
+
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+      box-shadow: 0 28px 80px rgba(15, 55, 100, 0.14);
+      border-radius: 34px;
+      overflow: hidden;
+    }
+
+    .hero-card {
+      position: relative;
+      width: 100%;
+      height: 430px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #d9e7f8;
+      box-shadow: 0 24px 58px rgba(15, 55, 100, 0.15);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(6, 31, 62, 0.90) 0%,
+        rgba(6, 31, 62, 0.66) 45%,
+        rgba(6, 31, 62, 0.18) 100%
+      );
+    }
+
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 48px;
+      right: 48px;
+      bottom: 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.34);
+      color: rgba(255,255,255,0.94);
+      font-size: 16px;
+      font-weight: 850;
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .school-name-cn {
+      margin: 0;
+      max-width: 94%;
+      color: #ffffff;
+      font-size: clamp(38px, 4.4vw, 52px);
+      line-height: 1.08;
+      font-weight: 950;
+      letter-spacing: -0.06em;
+      white-space: nowrap;
+      overflow: visible;
+    }
+
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 82%;
+      color: rgba(255,255,255,0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+    }
+
+    .curriculum-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+
+    .location-pill {
+      margin-top: 24px;
+      padding: 15px 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.96);
+      color: #0f2f5f;
+      font-size: 20px;
+      font-weight: 900;
+      max-width: 86%;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+
+    .section { margin-top: 42px; }
+
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .section-title-bar {
+      width: 8px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+
+    .section-title-row h2 {
+      margin: 0;
+      color: #082b5f;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .intro-card,
+    .path-card,
+    .compare-card,
+    .planning-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+
+    .intro-text {
+      margin: 0;
+      color: #243f63;
+      font-size: 24px;
+      line-height: 1.82;
+      font-weight: 580;
+      letter-spacing: -0.025em;
+    }
+
+    .intro-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .intro-stat-card {
+      min-height: 112px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-value {
+      color: #0f4fa3;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-label {
+      margin-top: 12px;
+      color: #667991;
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 850;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .route-step {
+      position: relative;
+      min-height: 190px;
+      padding: 24px 20px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 14px 34px rgba(15,55,100,0.06);
+    }
+
+    .route-age {
+      color: #2b70bd;
+      font-size: 17px;
+      font-weight: 950;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .route-step h3 {
+      margin: 16px 0 0;
+      color: #0a2d5f;
+      font-size: 27px;
+      line-height: 1.15;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .route-step p {
+      margin: 16px 0 0;
+      color: #52667f;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 580;
+      letter-spacing: -0.01em;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .gallery-card {
+      position: relative;
+      height: 172px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #eaf2fb;
+      box-shadow: 0 16px 34px rgba(15,55,100,0.08);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-label {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16,38,63,0.82);
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .feature-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #eef5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: 0 0 auto;
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 950;
+      letter-spacing: -0.025em;
+    }
+
+    .feature-card p {
+      margin: 10px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 570;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .compare-column {
+      padding: 30px;
+      border-radius: 28px;
+      background: #f6faff;
+      border: 1px solid rgba(37,104,184,0.12);
+    }
+
+    .compare-column h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 34px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.05em;
+    }
+
+    .compare-column .subtitle {
+      margin-top: 8px;
+      color: #2b70bd;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 900;
+    }
+
+    .compare-list {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 16px;
+    }
+
+    .compare-list li {
+      padding-left: 24px;
+      position: relative;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.65;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .compare-list li::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #2b70bd;
+      position: absolute;
+      left: 0;
+      top: 12px;
+    }
+
+    .assessment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .assessment-card {
+      min-height: 260px;
+      padding: 30px 28px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .assessment-label {
+      color: #2b70bd;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    .assessment-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 29px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .assessment-card p {
+      margin: 20px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.68;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .grade-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .grade-item {
+      padding: 18px 14px;
+      border-radius: 20px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.13);
+      text-align: center;
+    }
+
+    .grade-score {
+      color: #0f4fa3;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .grade-desc {
+      margin-top: 10px;
+      color: #667991;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 850;
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .student-card {
+      min-height: 238px;
+      padding: 30px 28px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .student-type {
+      color: #2b70bd;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    .student-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 30px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+
+    .student-card p {
+      margin: 20px 0 0;
+      color: #52667f;
+      font-size: 19px;
+      line-height: 1.68;
+      font-weight: 570;
+      letter-spacing: -0.015em;
+    }
+
+    .planning-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .planning-item {
+      padding: 24px 22px;
+      border-radius: 24px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.12);
+    }
+
+    .planning-item h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .planning-item p {
+      margin: 14px 0 0;
+      color: #52667f;
+      font-size: 17px;
+      line-height: 1.62;
+      font-weight: 570;
+      letter-spacing: -0.012em;
+    }
+
+    .system-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .system-feature-card {
+      padding: 30px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+
+    .system-feature-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 26px;
+      line-height: 1.25;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .system-feature-card p {
+      margin: 16px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 570;
+      letter-spacing: -0.012em;
+    }
+
+    @media print {
+      body { padding: 0; background: #ffffff; }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 0; }
+
+      .page {
+        border-radius: 0;
+        padding: 28px 22px 40px;
+      }
+
+      .hero-card { height: 480px; }
+
+      .hero-content {
+        left: 28px;
+        right: 28px;
+        top: 36px;
+      }
+
+      .school-name-cn {
+        font-size: 34px;
+        max-width: 100%;
+        white-space: normal;
+      }
+
+      .school-name-en {
+        max-width: 100%;
+        font-size: 21px;
+      }
+
+      .intro-stats-grid,
+      .gallery,
+      .planning-grid,
+      .grade-band {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .route-grid,
+      .student-grid,
+      .feature-grid,
+      .compare-grid,
+      .assessment-grid,
+      .system-feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .intro-stats-grid,
+      .gallery,
+      .planning-grid,
+      .grade-band {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title-row h2 { font-size: 30px; }
+      .intro-text { font-size: 20px; }
+      .gallery-card { height: 210px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>体系特点</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌏</div>
+          <div>
+            <h3>直接衔接澳洲教育</h3>
+            <p>澳洲课程体系的学段、课堂方式和高中证书与澳洲教育路径关联紧密，适合未来考虑澳洲方向的家庭。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧭</div>
+          <div>
+            <h3>两种高中出口并存</h3>
+            <p>AISM 对应 NSW HSC，PISA 对应 Victorian VCE，家长需要理解两条路线在州别、评估和大学申请衔接上的差异。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <div>
+            <h3>重视课堂参与与表达</h3>
+            <p>澳洲式学习强调学生在课堂中的参与、表达、合作、探究和反馈，而不是只依赖一次性考试表现。</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <div>
+            <h3>强调全人教育</h3>
+            <p>课程通常兼顾学术、体育、艺术、领导力和社会情感发展，帮助学生在多维度中建立自信。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>AISM 与 PISA 路线差异</h2>
+      </div>
+      <div class="compare-card">
+        <div class="compare-grid">
+          <div class="compare-column">
+            <h3>AISM</h3>
+            <div class="subtitle">Australian Curriculum · NSW HSC</div>
+            <ul class="compare-list">
+              <li>位于 Seri Kembangan / The Mines Resort City 一带。</li>
+              <li>提供从 Early Years 到 Senior School 的澳洲课程路线。</li>
+              <li>高年级通常衔接 New South Wales Higher School Certificate。</li>
+              <li>适合希望走 NSW 体系、未来直接衔接澳洲或全球大学的家庭。</li>
+            </ul>
+          </div>
+          <div class="compare-column">
+            <h3>PISA</h3>
+            <div class="subtitle">Victorian Curriculum · VCE</div>
+            <ul class="compare-list">
+              <li>位于 Setia Alam, Shah Alam。</li>
+              <li>采用 Australian Victorian Curriculum，覆盖 Early Years 到 Year 12。</li>
+              <li>高年级衔接 Victorian Certificate of Education。</li>
+              <li>适合希望体验维多利亚州课程与 VCE 高中出口的家庭。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title-row">
+        <span class="section-title-bar"></span>
+        <h2>评分与学习方式</h2>
+      </div>
+      <div class="intro-card">
+        <div class="assessment-grid">
+          <div class="assessment-card">
+            <div class="assessment-label">AUSTRALIAN LEARNING</div>
+            <h3>重视持续学习表现</h3>
+            <p>澳洲课程通常不只看最终考试，也重视学生在课堂任务、作业、项目、讨论、测验和实践活动中的持续表现。</p>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-label">HSC PATHWAY</div>
+            <h3>NSW 高中证书路线</h3>
+            <p>HSC 是新南威尔士州高中毕业证书，高年级课程成绩与考试表现共同帮助学生衔接澳洲及国际大学申请。</p>
+          </div>
+          <div class="assessment-card">
+            <div class="assessment-label">VCE PATHWAY</div>
+            <h3>Victoria 高中证书路线</h3>
+            <p>VCE 是维多利亚州高中证书，学生通过高年级课程学习和评估获得升学所需成绩，用于澳洲及全球大学申请。</p>
+          </div>
+        </div>
+
+        <div class="grade-band">
+          <div class="grade-item">
+            <div class="grade-score">HSC</div>
+            <div class="grade-desc">AISM 高中出口</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">VCE</div>
+            <div class="grade-desc">PISA 高中出口</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">ATAR</div>
+            <div class="grade-desc">澳洲大学录取参考</div>
+          </div>
+          <div class="grade-item">
+            <div class="grade-score">Year 12</div>
+            <div class="grade-desc">大学申请关键阶段</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

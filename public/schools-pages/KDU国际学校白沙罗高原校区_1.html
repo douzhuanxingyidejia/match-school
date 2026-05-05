@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KDU国际学校白沙罗高原校区</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eaf3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; box-sizing: border-box; }
+    .hero-card,
+    .intro-card,
+    .advantages-grid,
+    .campus-gallery,
+    .curriculum-grid,
+    .activities-grid { width: 100%; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 28px 64px rgba(9, 42, 85, 0.22);
+      background: #d7e7f7;
+    }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6, 31, 62, 0.90) 0%, rgba(6, 31, 62, 0.62) 43%, rgba(6, 31, 62, 0.18) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 96%;
+      color: #ffffff;
+      font-size: clamp(33px, 3.8vw, 49px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+      text-shadow: 0 8px 24px rgba(0,0,0,0.24);
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 78%;
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 25px;
+      line-height: 1.35;
+      font-weight: 780;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .curriculum-tags span {
+      padding: 12px 26px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      color: #ffffff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+    }
+    section { margin-top: 42px; }
+    .intro-section { margin-top: 34px; }
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .section-title-bar {
+      width: 8px;
+      height: 42px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%);
+      flex: 0 0 auto;
+    }
+    .section-title-row h2 {
+      margin: 0;
+      color: #082b5f;
+      font-size: 34px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+    .intro-card {
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 20px 50px rgba(15, 55, 100, 0.08);
+    }
+    .intro-text {
+      margin: 0;
+      color: #243f63;
+      font-size: 25px;
+      line-height: 1.82;
+      font-weight: 560;
+      letter-spacing: -0.025em;
+    }
+    .intro-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37, 104, 184, 0.14);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value {
+      color: #0f4fa3;
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      word-break: keep-all;
+    }
+    .stat-label {
+      margin-top: 12px;
+      color: #667991;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.10);
+      box-shadow: 0 16px 38px rgba(15, 55, 100, 0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #eef5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      flex: 0 0 auto;
+    }
+    .advantage-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 22px;
+      line-height: 1.3;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+    .advantage-card p {
+      margin: 10px 0 0;
+      color: #52667f;
+      font-size: 18px;
+      line-height: 1.7;
+      font-weight: 560;
+    }
+    .campus-section { margin-top: 42px; }
+    .campus-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .campus-card {
+      position: relative;
+      height: 170px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #eaf2fb;
+      box-shadow: 0 16px 34px rgba(15, 55, 100, 0.08);
+    }
+    .campus-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .campus-label {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16, 38, 63, 0.82);
+      color: #ffffff;
+      font-size: 19px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+    }
+    .curriculum-section { margin-top: 46px; }
+    .curriculum-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .curriculum-card {
+      min-height: 245px;
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37, 104, 184, 0.12);
+      box-shadow: 0 18px 42px rgba(15, 55, 100, 0.07);
+    }
+    .curriculum-age {
+      color: #2b70bd;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .curriculum-card h3 {
+      margin: 0;
+      color: #0a2d5f;
+      font-size: 32px;
+      line-height: 1.16;
+      font-weight: 950;
+      letter-spacing: -0.045em;
+    }
+    .curriculum-card p {
+      margin: 24px 0 0;
+      color: #52667f;
+      font-size: 19px;
+      line-height: 1.68;
+      font-weight: 560;
+      letter-spacing: -0.015em;
+    }
+    .activities-section { margin-top: 46px; }
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+    }
+    .activity-card {
+      min-height: 132px;
+      padding: 24px 16px;
+      border-radius: 22px;
+      background: #f6faff;
+      border: 1px solid rgba(37, 104, 184, 0.13);
+      box-shadow: 0 10px 24px rgba(15, 55, 100, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .activity-icon {
+      font-size: 28px;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .activity-title {
+      color: #0a2d5f;
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -0.02em;
+    }
+    @media (max-width: 900px) {
+      .page { padding: 26px 20px 40px; }
+      .hero-content { left: 28px; top: 36px; right: 28px; }
+      .school-name-cn { font-size: 32px; max-width: 100%; }
+      .school-name-en { max-width: 94%; font-size: 20px; }
+      .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+      .campus-gallery { grid-template-columns: repeat(2, 1fr); }
+      .activities-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-value { font-size: 24px; }
+      .advantages-grid { grid-template-columns: 1fr; }
+      .campus-card { height: 150px; }
+      .curriculum-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://srikdu.edu.my/kota-damansara-international/wp-content/uploads/2025/09/SriKDU_KD_International-0239-1-e1757561192598.jpg" alt="学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">KDU国际学校白沙罗高原校区</h1>
+          <div class="school-name-en">Sri KDU International School · Kota Damansara</div>
+          <div class="curriculum-tags">
+            <span>EYFS</span>
+            <span>British Curriculum</span>
+            <span>IGCSE</span>
+            <span>A-Level</span>
+          </div>
+          <div class="location-pill">📍 Kota Damansara · Petaling Jaya, Selangor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">Sri KDU International School Kota Damansara 是 Sri KDU 的旗舰国际校区，位于雪兰莪哥打白沙罗。学校提供从 Early Years 至 Sixth Form 的英式国际课程，并以学术、体育与艺术发展为核心方向，校园配套覆盖学习、实验、图书馆、体育与课外活动空间。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2003</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–18</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">无住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">ISQM Gold</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">🎓</div><div><h3>英式国际升学路径</h3><p>课程从低龄阶段衔接至 IGCSE 与 A-Level，适合希望沿英式体系规划海外本科方向的家庭。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏅</div><div><h3>ISQM Gold 质量认证</h3><p>学校展示 ISQM Gold 认证，并强调以国际学校质量标准支持教学、管理与持续改进。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🏫</div><div><h3>一体化校园设施</h3><p>校区配备图书馆、科学实验室、数字学习空间、泳池、篮球场等设施，覆盖学术与运动需求。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🌏</div><div><h3>国际化与本地理解并重</h3><p>学校以英语学习环境为主，同时融入马来西亚相关科目与文化理解，帮助学生建立全球与本地视角。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://srikdu.edu.my/kota-damansara-international/wp-content/uploads/2023/02/library1.jpg" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/kota-damansara-international/wp-content/uploads/2023/02/classroom1.jpg" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/kota-damansara-international/wp-content/uploads/2023/02/swimming1.jpg" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://srikdu.edu.my/kota-damansara-international/wp-content/uploads/2023/02/early1.jpg" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+          </div>
+  </main>
+</body>
+</html>

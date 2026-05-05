@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>腾比赛蒂国际学校介绍</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #eef6ff 0%, #f7fbff 48%, #edf5ff 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: #52667f;
+    }
+    .page {
+      width: 960px;
+      max-width: 100%;
+      min-height: 1358px;
+      margin: 0 auto;
+      padding: 42px 42px 56px;
+      box-sizing: border-box;
+    }
+    .report-shell, .content-wrap, .main-content { width: 100%; max-width: none; box-sizing: border-box; }
+    .hero-card {
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 360px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #dbe9f7;
+      box-shadow: 0 24px 58px rgba(12, 47, 88, 0.18);
+    }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(6,31,62,0.88) 0%, rgba(6,31,62,0.58) 42%, rgba(6,31,62,0.18) 100%);
+    }
+    .hero-content {
+      position: absolute;
+      left: 48px;
+      top: 54px;
+      right: 48px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      z-index: 2;
+    }
+    .school-name-cn {
+      margin: 0;
+      max-width: 94%;
+      color: #ffffff;
+      font-size: clamp(32px, 3.55vw, 47px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: visible;
+      text-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    }
+    .school-name-en {
+      margin-top: 18px;
+      max-width: 76%;
+      color: rgba(255,255,255,0.94);
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 760;
+      letter-spacing: -0.025em;
+    }
+    .curriculum-tags { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .curriculum-tags span {
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.36);
+      color: #fff;
+      font-size: 19px;
+      font-weight: 850;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+    }
+    .location-pill {
+      margin-top: 26px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      color: #0f2f5f;
+      font-size: 21px;
+      font-weight: 850;
+      line-height: 1.2;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+    }
+    .section-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+    .section-title-bar { width: 8px; height: 42px; border-radius: 999px; background: linear-gradient(180deg, #1f63b7 0%, #5aa7ff 100%); flex: 0 0 auto; }
+    .section-title-row h2 { margin: 0; color: #082b5f; font-size: 34px; line-height: 1.15; font-weight: 900; letter-spacing: -0.04em; }
+    .intro-section { margin-top: 34px; }
+    .intro-card {
+      width: 100%;
+      padding: 34px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 20px 50px rgba(15,55,100,0.08);
+    }
+    .intro-text { margin: 0; color: #243f63; font-size: 24px; line-height: 1.82; font-weight: 560; letter-spacing: -0.025em; }
+    .intro-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 30px; }
+    .intro-stat-card {
+      min-height: 106px;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: #eef5ff;
+      border: 1px solid rgba(37,104,184,0.14);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-value { color: #0f4fa3; font-size: 30px; line-height: 1.15; font-weight: 900; letter-spacing: -0.035em; word-break: keep-all; }
+    .stat-label { margin-top: 12px; color: #667991; font-size: 17px; line-height: 1.3; font-weight: 800; }
+    .advantages-section, .campus-section, .curriculum-section, .activities-section { margin-top: 46px; }
+    .advantages-grid { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .advantage-card {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.10);
+      box-shadow: 0 16px 38px rgba(15,55,100,0.07);
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .advantage-icon { width: 58px; height: 58px; border-radius: 18px; background: #eef5ff; display: flex; align-items: center; justify-content: center; font-size: 28px; flex: 0 0 auto; }
+    .advantage-card h3 { margin: 0; color: #0a2d5f; font-size: 22px; line-height: 1.3; font-weight: 900; letter-spacing: -0.025em; }
+    .advantage-card p { margin: 10px 0 0; color: #52667f; font-size: 18px; line-height: 1.7; font-weight: 560; }
+    .campus-gallery { width: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .campus-card { position: relative; height: 170px; border-radius: 24px; overflow: hidden; background: #eaf2fb; box-shadow: 0 16px 34px rgba(15,55,100,0.08); }
+    .campus-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .campus-label {
+      position: absolute;
+      left: 18px;
+      bottom: 16px;
+      padding: 11px 18px;
+      border-radius: 999px;
+      background: rgba(16,38,63,0.80);
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.16);
+    }
+    .curriculum-grid { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .curriculum-card {
+      min-height: 245px;
+      padding: 34px 32px;
+      border-radius: 30px;
+      background: #ffffff;
+      border: 1px solid rgba(37,104,184,0.12);
+      box-shadow: 0 18px 42px rgba(15,55,100,0.07);
+    }
+    .curriculum-age { color: #2b70bd; font-size: 20px; line-height: 1.2; font-weight: 900; letter-spacing: 0.04em; margin-bottom: 20px; }
+    .curriculum-card h3 { margin: 0; color: #0a2d5f; font-size: 32px; line-height: 1.16; font-weight: 950; letter-spacing: -0.045em; }
+    .curriculum-card p { margin: 24px 0 0; color: #52667f; font-size: 20px; line-height: 1.7; font-weight: 560; letter-spacing: -0.015em; }
+    .activities-grid { width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    .activity-card {
+      min-height: 132px;
+      padding: 24px 16px;
+      border-radius: 22px;
+      background: #f6faff;
+      border: 1px solid rgba(37,104,184,0.13);
+      box-shadow: 0 10px 24px rgba(15,55,100,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .activity-icon { font-size: 28px; line-height: 1; margin-bottom: 14px; }
+    .activity-title { color: #0a2d5f; font-size: 19px; line-height: 1.25; font-weight: 900; text-align: center; letter-spacing: -0.02em; }
+    @media (max-width: 900px) {
+      .page { padding: 28px 20px 44px; }
+      .curriculum-grid { grid-template-columns: repeat(2, 1fr); }
+      .school-name-cn { font-size: 30px; max-width: 100%; }
+      .school-name-en { max-width: 86%; }
+    }
+    @media (max-width: 760px) {
+      .hero-card { height: 410px; border-radius: 28px; }
+      .hero-content { left: 26px; right: 24px; top: 38px; }
+      .school-name-cn { font-size: 24px; letter-spacing: -0.05em; }
+      .school-name-en { font-size: 19px; max-width: 100%; }
+      .curriculum-tags span { font-size: 15px; padding: 10px 16px; }
+      .location-pill { font-size: 16px; padding: 13px 18px; }
+      .intro-card { padding: 26px; }
+      .intro-text { font-size: 18px; line-height: 1.75; }
+      .intro-stats-grid, .campus-gallery, .activities-grid { grid-template-columns: repeat(2, 1fr); }
+      .advantages-grid, .curriculum-grid { grid-template-columns: 1fr; }
+      .campus-card { height: 150px; }
+      .stat-value { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="report-shell">
+      <header class="hero-card">
+        <img class="hero-image" src="https://www.tenby.edu.my/TenbySchools/_Schools/setiaEcoHill/New%20Pictures/22564/image-thumb__22564__w3840/Website_Front.4a412321.webp" alt="腾比赛蒂国际学校校园图片">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="school-name-cn">腾比赛蒂国际学校</h1>
+          <div class="school-name-en">Tenby International School · Setia EcoHill</div>
+          <div class="curriculum-tags">
+            <span>British Curriculum</span>
+            <span>IPC</span>
+            <span>IGCSE</span>
+          </div>
+          <div class="location-pill">📍 Setia EcoHill · Semenyih, Selangor</div>
+        </div>
+      </header>
+
+      <section class="intro-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>学校简介</h2></div>
+        <div class="intro-card">
+          <p class="intro-text">腾比赛蒂国际学校位于雪兰莪士毛月 Setia EcoHill，提供以英国国家课程为基础的国际教育路径。学校覆盖幼儿、国际小学与国际中学阶段，并结合英语、中文与马来语学习、可持续发展项目、生态花园与森林学校体验，形成强调探索、项目学习与学生领导力的校园环境。</p>
+          <div class="intro-stats-grid">
+            <div class="intro-stat-card"><div class="stat-value">2016</div><div class="stat-label">创校年份</div></div>
+            <div class="intro-stat-card"><div class="stat-value">3–16</div><div class="stat-label">覆盖年龄</div></div>
+            <div class="intro-stat-card"><div class="stat-value">无住宿</div><div class="stat-label">学校住宿</div></div>
+            <div class="intro-stat-card"><div class="stat-value">Cambridge</div><div class="stat-label">国际认证</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="advantages-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>核心优势</h2></div>
+        <div class="advantages-grid">
+          <div class="advantage-card"><div class="advantage-icon">📘</div><div><h3>英国课程衔接 IGCSE</h3><p>课程以英国国家课程为核心，国际中学阶段面向 IGCSE 学习与考试准备。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🌱</div><div><h3>生态校园学习体验</h3><p>校园设有生态花园与森林学校体验，学生通过可持续发展项目理解生态与责任。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🗣️</div><div><h3>三语学习环境</h3><p>英语为主要学习语言，并提供中文、马来语与 EAL 英语支持。</p></div></div>
+          <div class="advantage-card"><div class="advantage-icon">🤖</div><div><h3>科技与创新学习</h3><p>学校强调数字素养、机器人、虚拟现实与创新课堂，支持学生的现代学习能力。</p></div></div>
+        </div>
+      </section>
+
+      <section class="campus-section">
+        <div class="section-title-row"><span class="section-title-bar"></span><h2>校园环境</h2></div>
+        <div class="campus-gallery">
+          <div class="campus-card"><img src="https://mint-edm.sgp1.digitaloceanspaces.com/production/dvdaGZ0UOnKRyLLa8cyuhqBAu2bTnc--o.webp" alt="校园"><span class="campus-label">校园</span></div>
+          <div class="campus-card"><img src="https://mint-edm.sgp1.digitaloceanspaces.com/production/chHDf1AhljOQM2XXw8ynrqhwiMFOqd--o.webp" alt="学习空间"><span class="campus-label">学习空间</span></div>
+          <div class="campus-card"><img src="https://mint-edm.sgp1.digitaloceanspaces.com/production/G84kunceXdEpFC3Q53e6hrFJdFdCUW--o.webp" alt="体育设施"><span class="campus-label">体育设施</span></div>
+          <div class="campus-card"><img src="https://mint-edm.sgp1.digitaloceanspaces.com/production/fcY2CjYI9O5pd8lA3GzReyo1jXHqjx--o.webp" alt="运动训练"><span class="campus-label">运动训练</span></div>
+        </div>
+      </section>
+
+          </div>
+  </main>
+</body>
+</html>
